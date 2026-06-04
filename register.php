@@ -9,10 +9,8 @@
 
     require_once 'api/UserController.php';
 
-    $login = "";
-    $password = "";
-    $users = json_decode(file_get_contents('data/users.json'), true);
-    $log = 'data/auth.log';
+    $u = json_decode(file_get_contents('data/users.json'), true);
+    $users = $u['users'];
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST'){
         $username = trim($_POST['username']);
@@ -23,19 +21,15 @@
             'email' => $email,
             'password' => $password
         ];
-        $time = date('Y-m-d H:i:s');
-        if (!isset($users[$login])){
-            createUser($input);
-            $_SESSION['user_id'] = $users[$login]['id'];
-            $_SESSION['user_login'] = $login;
-            $line = $time . " || user=" . $login . " | action=SUCCESS_REGISTRATION\n";
-            file_put_contents($log, $line, FILE_APPEND);
-            header('Location: account.php');
+        $result = createNewUser($input['username'], $input['email'], $input['password']);
+        if (isset($result['error'])) {
+            writeLog('Указанный email (' . $input['email'] . ') занят');
         } else {
-            $line = $time . " || user=" . $login . " | action=USER_ALREADY_EXISTS\n";
-            file_put_contents($log, $line, FILE_APPEND);
+            $_SESSION['user_id'] = $result['user']['id'];
+            $_SESSION['user_username'] = $username;
+            writeLog('Регистрация произошла успешно', $username, $result['user']['id']);
+            header('Location: account.php');
         }
-        
     }
 
 ?>
