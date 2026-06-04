@@ -7,6 +7,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    min-width: 100vw;
     margin: 0;
     padding: 0;
 }
@@ -22,4 +23,12 @@ body {
 
 .copyright {
     flex-shrink: 0;
+    text-align: right;
+}
+
+.login {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
