@@ -8,7 +8,8 @@
         <div class="page">
             
             <div class="headline">
-                <a href="index.php">Главная</a> <a href="authors.php">Авторы</a> <a href="poetry.php">Произведения</a> <a href="account.php">Аккаунт</a>
+                <a href="index.php">Главная</a> <a href="authors.php">Авторы</a> <a href="poetry.php">Произведения</a> <a href="login.php">Аккаунт</a>
+                <hr>
             </div>
 
             <div class = "center">
@@ -16,6 +17,7 @@
             </div>
 
             <div class = "copyright">
+                <hr>
                 Все права защищены © 2026
             </div>
             
