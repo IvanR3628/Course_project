@@ -7,37 +7,35 @@
         exit;
     }
 
+    require_once 'api/UserController.php';
+
     $reg = "";
     $password = "";
     $u = json_decode(file_get_contents('data/users.json'), true);
     $users = $u['users'];
-    $log = 'data/auth.log';
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST'){
         $reg = trim($_POST['reg']);
         $password = $_POST['password'];
-        $time = date('Y-m-d H:i:s');
-        //переделать словарь в проверку массива
         foreach ($users as $user){
             if ($user['username'] == $reg || $user['email'] == $reg){
+                $userexist = "true";
                 if (password_verify($password, $user['password_hash'])){
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['user_username'] = $user['username'];
-                    $line = $time . " || user=" . $login . " | action=SUCCESS_LOGIN\n";
-                    file_put_contents($log, $line, FILE_APPEND);
+                    writeLog("Пользователь успешно авторизовался", $user['username'], $user['id']);
                     header('Location: account.php');
                     exit;
                 } else {
-                    $line = $time . " || user=" . $user['username'] . " | action=FAIL_LOGIN\n";
-                    file_put_contents($log, $line, FILE_APPEND);
                     $error = "Неверный пароль";
-                    break;
                 }
             }
         }
-        if (!isset($error)){
-            $line = $time . " || user=" . $reg . " | action=NO_SUCH_USER\n";
-            file_put_contents($log, $line, FILE_APPEND);
+        if (!isset($userexist)){
+            writelog("Пользователя не существует", $reg);
+        }
+        if (isset($error)){
+            writelog($error, $reg);
         }
     }
 

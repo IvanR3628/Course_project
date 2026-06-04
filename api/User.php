@@ -9,7 +9,7 @@
         return $data['users'];
     }
 
-    function findUser($id) {
+    function findUserId($id) {
         $users = getUsers();
         foreach ($users as $user) {
             if ($user['id'] == $id) {
@@ -48,7 +48,8 @@
             'id' => $newId,
             'username' => $username,
             'email' => $email,
-            'password_hash' => password_hash($password, PASSWORD_DEFAULT)
+            'password_hash' => password_hash($password, PASSWORD_DEFAULT),
+            'registrationdate' => date('Y-m-d H:i:s', strtotime('+1 hour'))
         ];
         
         $users[] = $newUser;

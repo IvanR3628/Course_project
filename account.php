@@ -7,13 +7,13 @@
         exit;
     }
 
+    require_once 'api/UserController.php';
+
     $username = $_SESSION['user_username'];
-    $log = 'data/auth.log';
+    $id = $_SESSION['user_id'];
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-        $time = date('Y-m-d H:i:s');
-        $line = $time . " || user=" . $username . " | action=LOGOUT\n";
-        file_put_contents($log, $line, FILE_APPEND);
+        writeLog('Пользователь вышел из системы', $username, $id);
         $_SESSION = array();
         session_destroy();
         header('Location: login.php');

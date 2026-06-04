@@ -1,50 +1,12 @@
-2026-06-04 04:49:20 || user=user | action=NO_SUCH_USER
-2026-06-04 04:49:26 || user=user | action=NO_SUCH_USER
-2026-06-04 04:54:13 || user=user | action=NO_SUCH_USER
-2026-06-04 04:58:27 || user=user | action=NO_SUCH_USER
-2026-06-04 04:58:30 || user=user | action=NO_SUCH_USER
-2026-06-04 04:58:58 || user=user | action=NO_SUCH_USER
-2026-06-04 04:59:01 || user=user | action=NO_SUCH_USER
-2026-06-04 05:00:15 || user=user | action=NO_SUCH_USER
-2026-06-04 05:16:53 || user=user | action=NO_SUCH_USER
-2026-06-04 05:24:03 || user=user | action=NO_SUCH_USER
-2026-06-04 05:32:11 || user=user | action=NO_SUCH_USER
-2026-06-04 05:32:42 || user=user | action=NO_SUCH_USER
-2026-06-04 05:32:44 || user=user | action=NO_SUCH_USER
-2026-06-04 05:41:26 || user=user | action=NO_SUCH_USER
-2026-06-04 05:43:10 || user=user | action=NO_SUCH_USER
-2026-06-04 05:44:08 || user=user | action=NO_SUCH_USER
-2026-06-04 05:45:56 || user=user | action=NO_SUCH_USER
-2026-06-04 05:50:20 || user=user | action=NO_SUCH_USER
-2026-06-04 05:51:18 || user=user | action=NO_SUCH_USER
-2026-06-04 06:20:16 || user= | action=NO_SUCH_USER
-2026-06-04 06:20:19 || user= | action=NO_SUCH_USER
-2026-06-04 06:20:46 || user= | action=NO_SUCH_USER
-2026-06-04 06:21:06 || user= | action=NO_SUCH_USER
-2026-06-04 06:22:07 || user= | action=NO_SUCH_USER
-2026-06-04 06:24:00 || user=user | action=NO_SUCH_USER
-2026-06-04 06:24:22 || user=user | action=NO_SUCH_USER
-2026-06-04 06:24:26 || user=user | action=NO_SUCH_USER
-2026-06-04 06:24:45 || user=user | action=NO_SUCH_USER
-2026-06-04 06:24:55 || user=user | action=NO_SUCH_USER
-2026-06-04 06:25:12 || user=user | action=NO_SUCH_USER
-2026-06-04 06:25:50 || user=user | action=NO_SUCH_USER
-2026-06-04 06:26:04 || user=user | action=NO_SUCH_USER
-2026-06-04 06:28:07 || user=user | action=NO_SUCH_USER
-2026-06-04 06:28:21 || user=user | action=NO_SUCH_USER
-2026-06-04 06:28:23 || user=user | action=NO_SUCH_USER
-2026-06-04 06:28:37 || user=user | action=NO_SUCH_USER
-2026-06-04 06:30:15 || user=user | action=NO_SUCH_USER
-2026-06-04 06:30:56 || user=user | action=NO_SUCH_USER
-2026-06-04 20:50:45 || user=user | action=NO_SUCH_USER
-2026-06-04 20:53:35 || user= | action=SUCCESS_LOGIN
-2026-06-04 20:53:40 || user= | action=SUCCESS_LOGIN
-2026-06-04 20:54:36 || user= | action=SUCCESS_LOGIN
-2026-06-04 21:01:37 || user= | action=SUCCESS_LOGIN
-2026-06-04 21:01:48 || user= | action=SUCCESS_LOGIN
-2026-06-04 21:02:09 || user=user | action=FAIL_LOGIN
-2026-06-04 21:02:16 || user= | action=SUCCESS_LOGIN
-2026-06-04 21:03:23 || user= | action=SUCCESS_LOGIN
-2026-06-04 21:09:19 || user=user | action=LOGOUT
-2026-06-04 21:09:24 || user= | action=SUCCESS_LOGIN
-2026-06-04 21:09:29 || user=user | action=LOGOUT
+2026-06-04 23:19:42 | username: user | id: 1 | Регистрация произошла успешно
+2026-06-04 23:19:44 | username: user | id: 1 | Пользователь вышел из системы
+2026-06-04 23:19:52 | username: user2 | id: 2 | Регистрация произошла успешно
+2026-06-04 23:20:09 | username: user3 | id: 3 | Регистрация произошла успешно
+2026-06-04 23:20:13 | username: user3 | id: 3 | Пользователь вышел из системы
+2026-06-04 23:21:50 | username: user4 | id: 4 | Регистрация произошла успешно
+2026-06-04 23:21:53 | username: user4 | id: 4 | Пользователь вышел из системы
+2026-06-04 23:21:56 | username: user4 | id: 4 | Пользователь успешно авторизовался
+2026-06-04 23:21:57 | username: user4 | id: 4 | Пользователь вышел из системы
+2026-06-04 23:22:02 | Указанный email (user4) занят
+2026-06-04 23:22:10 | API request: Указанный email (user2) занят
+2026-06-04 23:22:35 | username: user6 | id: 5 | API request: Регистрация произошла успешно

@@ -2,6 +2,20 @@
 //проверить функции чтобы работали под массивы
     require_once 'User.php';
 
+    function writeLog($message, $username = "", $id = 0){
+        $log = dirname(__DIR__) . '\data\auth.log';
+        $time = date('Y-m-d H:i:s', strtotime('+1 hour'));
+        $line = $time . " | ";
+        if ($username != ""){
+            $line = $line . "username: " . $username . " | ";
+        }
+        if ($id != 0){
+            $line = $line . "id: " . $id . " | ";
+        }
+        $line = $line . $message . "\n";
+        file_put_contents($log, $line, FILE_APPEND);
+    }
+
     function sendJsonResponse($status, $message, $data = null){
         $response = ['status' => $status, 'message' => $message];
         if ($data !== null){
@@ -11,6 +25,17 @@
             $response['data'] = $data;
         }
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        $username = "";
+        $id = 0;
+        if (isset($data['username'])){
+            $username = $data['username'];
+        }
+        if (isset($data['id'])){
+            $id = $data['id'];
+        }
+        $message = "API request: " . $message;
+        writeLog($message, $username, $id);
+        
         exit;
     }
 
@@ -27,7 +52,7 @@
     }
 
     function getOneUser($id){
-        $user = findUser($id);
+        $user = findUserId($id);
         if ($user === null) {
             sendJsonResponse('error', 'Пользователь не найден');
         }
@@ -38,21 +63,21 @@
         if (empty($input['username']) || empty($input['email']) || empty($input['password'])) {
             sendJsonResponse('error', 'Поля не были заполнены');
         }
-        $result = createNewUser($input['username'], $input['email'], $input['password']);
         
+        $result = createNewUser($input['username'], $input['email'], $input['password']);
         if (isset($result['error'])) {
-            sendJsonResponse('error', 'Указанный email занят');
+            sendJsonResponse('error', 'Указанный email (' . $input['email'] . ') занят');
         } else {
             sendJsonResponse('success', 'Регистрация произошла успешно', $result['user']);
         }
     }
 
     function loginUser($input){
-        if (empty($input['login']) || empty($input['email']) || empty($input['password'])) {
+        if (empty($input['username']) || empty($input['email']) || empty($input['password'])) {
             sendJsonResponse('error', 'Поля не были заполнены');
         }
         
-        $result = checkUser($input['login'], $input['email'], $input['password']);
+        $result = checkUser($input['username'], $input['email'], $input['password']);
         
         if (isset($result['error'])) {
             sendJsonResponse('error', 'Данные указаны неправильно');
