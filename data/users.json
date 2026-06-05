@@ -5,7 +5,7 @@
             "username": "user",
             "email": "user@user.ru",
             "password_hash": "$2y$10$tJK07C8pMyCsCnoJvERyWeveycJbqMEoW8Ayt5hZ2X.g\/Z401lTHe",
-            "registrationdate": "2026-06-05 17:31:19",
+            "registrationdate": "2026-04-05 17:31:19",
             "age": null
         },
         {
@@ -13,7 +13,7 @@
             "username": "user",
             "email": "user2@user.ru",
             "password_hash": "$2y$10$pYtElgFuqCwnfjt6.EkCWebq2gqJYNlx0dFEWScjIR1t8Yqd.owvS",
-            "registrationdate": "2026-06-05 17:34:30",
+            "registrationdate": "2026-01-05 17:34:30",
             "age": "20"
         },
         {

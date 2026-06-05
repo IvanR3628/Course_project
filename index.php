@@ -30,7 +30,7 @@
     <body>
         <?php if (isset($_SESSION['user_id'])): ?>
             <?php if ($canWrite): ?>
-                    <button onclick="location.href='write.html'" class="writebutton">
+                    <button onclick="location.href='write.php'" class="writebutton">
                         Начать творить
                     </button>
                 <?php else: ?>
@@ -46,7 +46,7 @@
         <div class="page">
             
             <div class="headline">
-                <a href="index.php">Главная</a> <a href="authors.php">Авторы</a> <a href="poetry.php">Произведения</a> <a href="login.php">Аккаунт</a>
+                <a href="index.php">Главная</a> <a href="poetry.php">Читать</a> <a href="login.php">Аккаунт</a>
                 <hr>
             </div>
 
