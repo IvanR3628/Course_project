@@ -9,16 +9,20 @@
 
     require_once 'api/UserController.php';
 
-    $reg = "";
+    $email = "";
     $password = "";
     $u = json_decode(file_get_contents('data/users.json'), true);
+    if (!$u){
+        createFile();
+        $u = json_decode(file_get_contents('data/users.json'), true);
+    }
     $users = $u['users'];
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-        $reg = trim($_POST['reg']);
+        $email = trim($_POST['email']);
         $password = $_POST['password'];
         foreach ($users as $user){
-            if ($user['username'] == $reg || $user['email'] == $reg){
+            if ($user['email'] == $email){
                 $userexist = "true";
                 if (password_verify($password, $user['password_hash'])){
                     $_SESSION['user_id'] = $user['id'];
@@ -28,14 +32,15 @@
                     exit;
                 } else {
                     $error = "Неверный пароль";
+                    exit;
                 }
             }
         }
         if (!isset($userexist)){
-            writelog("Пользователя не существует", $reg);
+            writelog("Пользователя не существует", $email);
         }
         if (isset($error)){
-            writelog($error, $reg);
+            writelog($error, $email);
         }
     }
 
@@ -58,8 +63,8 @@
             <div class="login">
                 <form method="POST">
                     <div>
-                        <label for="reg">Имя/почта:</label>
-                        <input type="text" id="reg" name="reg" required>
+                        <label for="email">Почта:</label>
+                        <input type="text" id="email" name="email" required>
                     </div>
                     <div>
                         <label for="password">Пароль:</label>
@@ -67,7 +72,7 @@
                     </div>
                     <div>
                         <button type="submit">Войти</button>
-                        <a href="register.php" class="register-btn">Зарегистрироваться</a>
+                        <a href="register.php">Зарегистрироваться</a>
                     </div>
                 </form>
             </div>

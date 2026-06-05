@@ -2,12 +2,25 @@
 
     session_start();
 
+    require_once 'api/UserController.php';
+
+    $canWrite = false;
+
     if (!isset($_SESSION['user_id'])) {
         header('Location: login.php');
         exit;
+    } else {
+        $user = findUserId($_SESSION['user_id']);
+        if ($user){
+            $regDate = strtotime($user['registrationdate']);
+            $currentDate = time();
+            $timeDiff = $currentDate - $regDate;
+            $hoursPassed = $timeDiff / 3600;
+            if ($hoursPassed >= 24) {
+                $canWrite = true;
+            }
+        }
     }
-
-    require_once 'api/UserController.php';
 
     $username = $_SESSION['user_username'];
     $id = $_SESSION['user_id'];
@@ -29,6 +42,21 @@
         <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
     <body>
+        <?php if (isset($_SESSION['user_id'])): ?>
+            <?php if ($canWrite): ?>
+                    <button onclick="location.href='write.html'" class="writebutton">
+                        Начать творить
+                    </button>
+                <?php else: ?>
+                    <button onclick="alert('Новые пользователи могут начать творить только через сутки после регистрации.')" class="writebutton">
+                        Начать творить
+                    </button>
+                <?php endif; ?>
+            <?php else: ?>
+                <button onclick="alert('Пожалуйста, авторизуйтесь, чтобы начать творить.')" class="writebutton">
+                    Начать творить
+                </button>
+        <?php endif; ?>
         <div class="page">
             
             <div class="headline">
