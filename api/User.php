@@ -1,5 +1,11 @@
 <?php
-//переделать все функции работающие на словари под массив
+
+    function createFile() {
+        $file = dirname(__DIR__) . '\data\users.json';
+        $data = ['users' => []];
+        file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT));
+    }
+
     function getUsers() {
         $file = dirname(__DIR__) . '\data\users.json';
         $data = json_decode(file_get_contents($file), true);
@@ -31,10 +37,10 @@
 
     function saveAllUsers($users) {
         $file = dirname(__DIR__) . '\data\users.json';
-        file_put_contents($file, json_encode(['users' => $users]));
+        file_put_contents($file, json_encode(['users' => $users], JSON_PRETTY_PRINT));
     }
 
-    function createNewUser($username, $email, $password) {
+    function createNewUser($username, $email, $password, $age = "") {
         $users = getUsers();
         if (findUserEmail($email)) {
             return ['error' => true];
@@ -44,12 +50,16 @@
         } else {
             $newId = $users[count($users) - 1]['id'] + 1;
         }
+        if ($age == "") {
+            $age = null;
+        }
         $newUser = [
             'id' => $newId,
             'username' => $username,
             'email' => $email,
             'password_hash' => password_hash($password, PASSWORD_DEFAULT),
-            'registrationdate' => date('Y-m-d H:i:s', strtotime('+1 hour'))
+            'registrationdate' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+            'age' => $age
         ];
         
         $users[] = $newUser;

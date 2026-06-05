@@ -1,13 +1,19 @@
 <?php
-//проверить функции чтобы работали под массивы
     require_once 'User.php';
 
-    function writeLog($message, $username = "", $id = 0){
+    function validEmail($email){
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+        return true;
+    }
+
+    function writeLog($message, $email = "", $id = 0){
         $log = dirname(__DIR__) . '\data\auth.log';
         $time = date('Y-m-d H:i:s', strtotime('+1 hour'));
         $line = $time . " | ";
-        if ($username != ""){
-            $line = $line . "username: " . $username . " | ";
+        if ($email != ""){
+            $line = $line . "email: " . $email . " | ";
         }
         if ($id != 0){
             $line = $line . "id: " . $id . " | ";
@@ -25,16 +31,16 @@
             $response['data'] = $data;
         }
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
-        $username = "";
+        $email = "";
         $id = 0;
-        if (isset($data['username'])){
-            $username = $data['username'];
+        if (isset($data['email'])){
+            $email = $data['email'];
         }
         if (isset($data['id'])){
             $id = $data['id'];
         }
         $message = "API request: " . $message;
-        writeLog($message, $username, $id);
+        writeLog($message, $email, $id);
         
         exit;
     }
@@ -64,7 +70,30 @@
             sendJsonResponse('error', 'Поля не были заполнены');
         }
         
-        $result = createNewUser($input['username'], $input['email'], $input['password']);
+        
+        if ((strlen($input['username']) < 2 || strlen($input['username']) > 100)) {
+            sendJsonResponse('error', 'Псевдоним должен быть от 2 до 100 символов');
+            return 0;
+        }
+        if (!validEmail($input['email'])) {
+            sendJsonResponse('error', 'Невалидный email');
+            return 0;
+        }
+        if (strlen($input['password']) < 6) {
+            sendJsonResponse('error', 'Пароль должен быть от 6 символов');
+            return 0;
+        }
+        
+        $age = null;
+        if (isset($input['age'])) {
+            $age = $input['age'];
+            if ($age < 1 || $age > 200){
+                sendJsonResponse('error', 'Возраст должен быть от 1 до 200');
+                return 0;
+            }
+        }
+        
+        $result = createNewUser($input['username'], $input['email'], $input['password'], $age);
         if (isset($result['error'])) {
             sendJsonResponse('error', 'Указанный email (' . $input['email'] . ') занят');
         } else {
