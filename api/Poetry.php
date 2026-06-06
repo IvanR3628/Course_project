@@ -1,6 +1,6 @@
 <?php
 
-    function createFile() {
+    function createPFile() {
         $file = dirname(__DIR__) . '\data\poetry.json';
         $data = ['poetry' => []];
         file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT));

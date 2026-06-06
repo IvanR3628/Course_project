@@ -61,12 +61,13 @@
         <meta charset="UTF-8">
         <title>Стихотвория – Регистрация</title>
         <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="css/loginstyle.css">
     </head>
     <body>
         <div class="page">
         
             <div class="headline">
-                <a href="index.php">Главная</a> <a href="authors.php">Авторы</a> <a href="poetry.php">Произведения</a> <a href="login.php">Аккаунт</a>
+                <a href="index.php">Главная</a> <a href="read.php">Читать</a> <a href="login.php">Аккаунт</a>
                 <hr>
             </div>
             

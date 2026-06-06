@@ -60,11 +60,11 @@
         <div class="page">
             
             <div class="headline">
-                <a href="index.php">Главная</a> <a href="poetry.php">Читать</a> <a href="login.php">Аккаунт</a>
+                <a href="index.php">Главная</a> <a href="read.php">Читать</a> <a href="login.php">Аккаунт</a>
                 <hr>
             </div>
 
-            <div class="login">
+            <div class="center">
                 <form method="POST">
                     <div>
                         <h1>Добро пожаловать, <?php echo $_SESSION['user_username']; ?>!</h1>
@@ -82,6 +82,5 @@
             
         </div>
         
-        <script src="script.js"></script>
     </body>
 </html>
