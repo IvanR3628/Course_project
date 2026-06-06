@@ -5,7 +5,7 @@
     require_once 'api/Poetry.php';
 
     if (filesize('data/poetry.json') == 0) {
-        createFile();
+        createPFile();
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -43,12 +43,13 @@
         <meta charset="UTF-8">
         <title>Стихотвория – Творить</title>
         <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="css/writestyle.css">
     </head>
     <body>
         <div class="page">
             
             <div class="headline">
-                <a href="index.php">Главная</a> <a href="poetry.php">Читать</a> <a href="login.php">Аккаунт</a>
+                <a href="index.php">Главная</a> <a href="read.php">Читать</a> <a href="login.php">Аккаунт</a>
                 <hr>
             </div>
 
@@ -63,9 +64,9 @@
                                 <p class="nodrafts">Нет сохранённых черновиков</p>
                             </div>
                             <div class="draftsbuttons">
-                                <button id="loadDraftBtn" class="draft-btn load">Загрузить черновик</button>
-                                <button id="deleteDraftBtn" class="draft-btn delete">Удалить</button>
-                                <button id="clearAllDraftsBtn" class="draft-btn clear">Очистить всё</button>
+                                <button id="loadDraftButton" class="draftbuttonload">Загрузить черновик</button>
+                                <button id="deleteDraftButton" class="draftbuttondelete">Удалить</button>
+                                <button id="clearAllDraftsButton" class="draftbuttonclear">Очистить всё</button>
                             </div>
                         </div>
                         

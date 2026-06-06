@@ -2,9 +2,9 @@ let selectedDraftId = null;
 
 document.addEventListener('DOMContentLoaded', function() {
     
-    const saveBtn = document.getElementById('saveDraft');
-    if (saveBtn) {
-        saveBtn.addEventListener('click', function(e) {
+    const saveButton = document.getElementById('saveDraft');
+    if (saveButton) {
+        saveButton.addEventListener('click', function(e) {
             
             e.preventDefault();
             
@@ -45,9 +45,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    const loadBtn = document.getElementById('loadDraftBtn');
-    if (loadBtn) {
-        loadBtn.addEventListener('click', function() {
+    const loadButton = document.getElementById('loadDraftButton');
+    if (loadButton) {
+        loadButton.addEventListener('click', function() {
             if (!selectedDraftId) {
                 alert('Сначала выберите черновик.');
                 return;
@@ -74,9 +74,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    const deleteBtn = document.getElementById('deleteDraftBtn');
-    if (deleteBtn) {
-        deleteBtn.addEventListener('click', function() {
+    const deleteButton = document.getElementById('deleteDraftButton');
+    if (deleteButton) {
+        deleteButton.addEventListener('click', function() {
             if (!selectedDraftId) {
                 alert('Сначала выберите черновик.');
                 return;
@@ -91,9 +91,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    const clearAllBtn = document.getElementById('clearAllDraftsBtn');
-    if (clearAllBtn) {
-        clearAllBtn.addEventListener('click', function() {
+    const clearAllButton = document.getElementById('clearAllDraftsButton');
+    if (clearAllButton) {
+        clearAllButton.addEventListener('click', function() {
             if (confirm('Все черновики будут удалены. Продолжить?')) {
                 localStorage.removeItem(STORAGE_KEY);
                 selectedDraftId = null;
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const drafts = getDrafts();
         
         if (drafts.length === 0) {
-            container.innerHTML = '<p class="no-drafts">Нет сохранённых черновиков</p>';
+            container.innerHTML = '<p class="nodrafts">Нет сохранённых черновиков</p>';
             return;
         }
         
@@ -129,12 +129,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const isChecked = selectedDraftId === draft.id ? 'checked' : '';
             
             html += `
-                <div class="draft-item">
-                    <label style="display: block; cursor: pointer;">
+                <div class="draftitem">
+                    <label>
                         <input type="radio" name="draft_select" value="${draft.id}" ${isChecked}>
                         <strong>${safeHtml(title)}</strong>
-                        <div class="draft-description">${safeHtml(description)}</div>
-                        <div class="draft-date">${draft.timestamp}</div>
+                        <div>${safeHtml(description)}</div>
+                        <div>${draft.timestamp}</div>
                     </label>
                 </div>
             `;
