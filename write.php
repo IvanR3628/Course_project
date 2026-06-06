@@ -30,7 +30,7 @@
         }
         if ($_POST['action'] === "publish"){
             $result = createNewPoetry($title, $content, $description, $authorid, $anonymity, $author, $age);
-            writeLog('Создано новое стихотворение', $result['poetry']['title'], $result['poetry']['id']);
+            writePLog('Создано новое стихотворение', $result['poetry']['title'], $result['poetry']['id']);
             header('Location: write.php');
             exit;
         }
@@ -64,9 +64,9 @@
                                 <p class="nodrafts">Нет сохранённых черновиков</p>
                             </div>
                             <div class="draftsbuttons">
-                                <button id="loadDraftButton" class="draftbuttonload">Загрузить черновик</button>
-                                <button id="deleteDraftButton" class="draftbuttondelete">Удалить</button>
-                                <button id="clearAllDraftsButton" class="draftbuttonclear">Очистить всё</button>
+                                <button id="loadDraftButton">Загрузить черновик</button>
+                                <button id="deleteDraftButton">Удалить</button>
+                                <button id="clearAllDraftsButton">Очистить всё</button>
                             </div>
                         </div>
                         
@@ -94,7 +94,7 @@
 
                             <div>
                                 <label>Как опубликовать:</label>
-                                <div class="radio-group">
+                                <div>
                                     <label>
                                         <input type="radio" name="publish_as" value="user" checked>
                                         От моего имени (<?php echo $_SESSION['user_username'] ?>)
@@ -109,7 +109,7 @@
                             
                             <div>
                                 <label>Возрастное ограничение:</label>
-                                <div class="radio-group">
+                                <div>
                                     <label>
                                         <input type="radio" name="adult" value="0" checked>
                                         Для всех возрастов
@@ -122,7 +122,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-buttons">
+                            <div class="formbuttons">
                                 <button type="submit" name="action" value="publish">Опубликовать</button>
                                 <button type="submit" name="action" value="draft" id="saveDraft">Сохранить черновик</button>
                                 <button onclick="location.href='write.php'">Очистить</button>

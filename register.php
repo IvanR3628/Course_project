@@ -9,12 +9,7 @@
 
     require_once 'api/UserController.php';
 
-    $u = json_decode(file_get_contents('data/users.json'), true);
-    if (!$u){
-        createFile();
-        $u = json_decode(file_get_contents('data/users.json'), true);
-    }
-    $users = $u['users'];
+    $users = getUsers();
     $age = null;
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -95,6 +90,7 @@
                     </div>
                     <div>
                         <button type="submit">Зарегистрироваться</button>
+                        <a href="login.php">Войти</a>
                     </div>
                 </form>
             </div>

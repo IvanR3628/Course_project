@@ -17,6 +17,7 @@
     }
 
     $userAge = null;
+    $canWrite = false;
     if (isset($_SESSION['user_id'])) {
         $user = findUserId($_SESSION['user_id']);
         if ($user){
