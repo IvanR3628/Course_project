@@ -1,3 +1,81 @@
 {
-    "poetry": []
+    "poetry": [
+        {
+            "id": 1,
+            "title": "gf",
+            "content": "gfd",
+            "description": "",
+            "authorid": 1,
+            "anonymity": "n",
+            "author": "",
+            "age": "n",
+            "changedate": "2026-06-06 23:19:26"
+        },
+        {
+            "id": 2,
+            "title": "\u0442\u0438\u0442\u0438",
+            "content": "\u0442\u0438\u0442\u0438\u0442",
+            "description": "",
+            "authorid": 1,
+            "anonymity": "n",
+            "author": "",
+            "age": "n",
+            "changedate": "2026-06-06 23:24:09"
+        },
+        {
+            "id": 3,
+            "title": "tds",
+            "content": "gfd",
+            "description": "gfd",
+            "authorid": 1,
+            "anonymity": "y",
+            "author": "",
+            "age": "n",
+            "changedate": "2026-06-06 23:38:38"
+        },
+        {
+            "id": 4,
+            "title": "gfd",
+            "content": "gfd",
+            "description": "gfd",
+            "authorid": 3,
+            "anonymity": "n",
+            "author": "",
+            "age": "n",
+            "changedate": "2026-06-06 23:44:56"
+        },
+        {
+            "id": 5,
+            "title": "gf",
+            "content": "gf",
+            "description": "gf",
+            "authorid": 3,
+            "anonymity": "n",
+            "author": "g",
+            "age": "n",
+            "changedate": "2026-06-06 23:44:59"
+        },
+        {
+            "id": 6,
+            "title": "gfd",
+            "content": "gf",
+            "description": "gfd",
+            "authorid": 3,
+            "anonymity": "y",
+            "author": "g",
+            "age": "n",
+            "changedate": "2026-06-06 23:45:02"
+        },
+        {
+            "id": 7,
+            "title": "gfd",
+            "content": "gfd",
+            "description": "gfd",
+            "authorid": 3,
+            "anonymity": "y",
+            "author": "",
+            "age": "n",
+            "changedate": "2026-06-06 23:45:05"
+        }
+    ]
 }

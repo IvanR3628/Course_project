@@ -84,14 +84,17 @@
                 deletePoetryID($poemId);
             }
             
-            deleteUserID($_SESSION['user_id']);
-            writeLog('Удалён пользователь',  $user['email'], $user['id']);
+            $userId = $_SESSION['user_id'];
+            writeLog('Удалён пользователь', $user['email'], $userId);
+            deleteUserID($userId);
             
             $_SESSION = array();
             session_destroy();
-            header('Location: login.php');
-            exit;
             
+            echo    "<script>  localStorage.removeItem('poem_drafts_list_{$userId}');
+                                window.location.href = 'login.php';
+                    </script>";
+            exit;
             
         } else {
             writeLog('Неверный текущий пароль', $user['email']);

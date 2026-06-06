@@ -1,60 +1,31 @@
 {
     "users": [
         {
+            "id": 1,
+            "username": "user",
+            "email": "user@user.ru",
+            "password_hash": "$2y$10$M.JTKGGiQTNLCstlNBNnue2qpiA1INh5z8PsuUWqayJdNvTLR757q",
+            "registrationdate": "2026-04-06 23:15:09",
+            "age": "20",
+            "admin": "n"
+        },
+        {
             "id": 2,
-            "username": "user2",
-            "email": "user2@user.ru",
-            "password_hash": "$2y$10$r7yoOYFLSbCStyHwzy42AuTd5sdrsUpYBoE4eZhWotBKMWPhB9sC6",
-            "registrationdate": "2026-06-05 17:36:17",
-            "age": "111"
+            "username": "user6",
+            "email": "user8@user.ru",
+            "password_hash": "$2y$10$tak2UNyTS5hJSBPBqeUtverW1p5XIHHfupuK3f2k72p4lAn0M.e2m",
+            "registrationdate": "2026-06-06 23:15:37",
+            "age": null,
+            "admin": "y"
         },
         {
             "id": 3,
-            "username": "user3",
-            "email": "user3@gmail.com",
-            "password_hash": "$2y$10$r7yoOYFLSbCStyHwzy42AuTd5sdrsUpYBoE4eZhWotBKMWPhB9sC6",
-            "registrationdate": "2026-06-05 17:36:17",
-            "age": "111"
-        },
-        {
-            "id": 4,
-            "username": "user6",
-            "email": "user6@user.ru",
-            "password_hash": "$2y$10$DgXf9wfWDqwn6CgH1ygOR.BQKw330OZU\/hjcI8RheGV9tq9ccN9ty",
-            "registrationdate": "2026-06-05 17:44:21",
-            "age": null
-        },
-        {
-            "id": 5,
-            "username": "user6",
-            "email": "user7@user.ru",
-            "password_hash": "$2y$10$oXKWCBZLITBKW.GW5o3Lt..cnquJ2xwfgAHxTaVWQdkm1KFCdA90m",
-            "registrationdate": "2026-06-05 17:46:25",
-            "age": "10"
-        },
-        {
-            "id": 6,
-            "username": "user6",
-            "email": "user8@user.ru",
-            "password_hash": "$2y$10$RXUyUZYnTF1A78xFXv0UsOTuqVfqjLwNHVAC60nAYYbsxgMC6dAvq",
-            "registrationdate": "2026-06-05 17:46:56",
-            "age": null
-        },
-        {
-            "id": 7,
-            "username": "1111111",
-            "email": "aa@gmail.com",
-            "password_hash": "$2y$10$kDdPNmEW74hA91weNS4OhuisjrVDnysoNiZ15BKde36G49vs0AELW",
-            "registrationdate": "2026-06-05 17:48:11",
-            "age": null
-        },
-        {
-            "id": 8,
-            "username": "user",
-            "email": "usetretr@user.ru",
-            "password_hash": "$2y$10$bXrmftYZVwSTDckgjWfCAuiTcQUnzkBm1ehjhQlL54rEzEkJ7yguK",
-            "registrationdate": "2026-06-05 17:49:25",
-            "age": null
+            "username": "user2",
+            "email": "user2@user.ru",
+            "password_hash": "$2y$10$arVqOG20LRimH6DloEMZpeju7LwrkxR9NtpHT9zxKwSbKpRSK.bjm",
+            "registrationdate": "2026-04-06 23:24:35",
+            "age": null,
+            "admin": "n"
         }
     ]
 }

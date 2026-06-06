@@ -2,11 +2,23 @@
 
     session_start();
 
+    require_once 'api/UserController.php';
     require_once 'api/Poetry.php';
 
     if (filesize('data/poetry.json') == 0) {
         createPFile();
     }
+
+    $userAge = null;
+    if (isset($_SESSION['user_id'])) {
+        $user = findUserId($_SESSION['user_id']);
+        if ($user && isset($user['age'])) {
+            $userAge = (int)$user['age'];
+        }
+    } else {
+        header('Location: login.php');
+    }
+    $isAdult = ($userAge !== null && $userAge >= 18);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST'){
         $title = trim($_POST['title']); 
@@ -107,6 +119,8 @@
                                 </div>
                             </div>
                             
+                            
+                            <?php if ($isAdult): ?>
                             <div>
                                 <label>Возрастное ограничение:</label>
                                 <div>
@@ -121,6 +135,10 @@
                                     </label>
                                 </div>
                             </div>
+                            <?php else: ?>
+                                <input type="hidden" name="adult" value="0">
+                            <?php endif; ?>
+                            
 
                             <div class="formbuttons">
                                 <button type="submit" name="action" value="publish">Опубликовать</button>

@@ -93,7 +93,13 @@
             }
         }
         
-        $result = createNewUser($input['username'], $input['email'], $input['password'], $age);
+        if (isset($input['admin'])) {
+            $admin = $input['admin'];
+        } else {
+            $admin = "n";
+        }
+        
+        $result = createNewUser($input['username'], $input['email'], $input['password'], $age, $admin);
         if (isset($result['error'])) {
             sendJsonResponse('error', 'Указанный email (' . $input['email'] . ') занят');
         } else {

@@ -4,6 +4,7 @@
 
     $selectedPoemId = isset($_GET['poem_id']) ? (int)$_GET['poem_id'] : null;
     $filterAuthor = isset($_GET['author']) ? $_GET['author'] : null;
+    $filterPublisher = isset($_GET['publisher']) ? $_GET['publisher'] : null;
 
     require_once 'api/Poetry.php';
     require_once 'api/User.php';
@@ -18,6 +19,8 @@
 
     $userAge = null;
     $canWrite = false;
+    $isAdmin = false;
+
     if (isset($_SESSION['user_id'])) {
         $user = findUserId($_SESSION['user_id']);
         if ($user){
@@ -29,6 +32,7 @@
                 $canWrite = true;
             }
             $userAge = (int)$user['age'];
+            $isAdmin = $user['admin'];
         }
     }
 
@@ -67,6 +71,19 @@
     }
     $authors = array_unique($authors);
     $publishers = array_unique($publishers);
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+        
+        $poemId = (int)$_POST['poem_id'];
+        $poem = findPoemId($poemId);
+        
+        if ($poem && ($isAdmin === 'y' || $poem['authorid'] == $_SESSION['user_id'])) {
+            writePLog('Удалено стихотворение', $poem['title'], $poemId);
+            deletePoetryID($poemId);
+            header('Location: read.php');
+            exit;
+        }
+    }
 
 ?>
 
@@ -175,6 +192,9 @@
         <script>
             const allPoems = <?php echo json_encode($poems); ?>;
             const allUsers = <?php echo json_encode($usersById); ?>;
+            const currentUserId = <?php echo isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'null'; ?>;
+            const isAdmin = <?php echo json_encode($isAdmin); ?>;
+            const filterPublisher = <?php echo json_encode($filterPublisher); ?>;
         </script>
         <script src="js/poetryscript.js"></script>
     </body>

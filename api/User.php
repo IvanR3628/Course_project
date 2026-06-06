@@ -41,7 +41,7 @@
         file_put_contents($file, json_encode(['users' => $users], JSON_PRETTY_PRINT));
     }
 
-    function createNewUser($username, $email, $password, $age = "") {
+    function createNewUser($username, $email, $password, $age = "", $admin = "n") {
         $users = getUsers();
         if (findUserEmail($email)) {
             return ['error' => true];
@@ -60,7 +60,8 @@
             'email' => $email,
             'password_hash' => password_hash($password, PASSWORD_DEFAULT),
             'registrationdate' => date('Y-m-d H:i:s', strtotime('+1 hour')),
-            'age' => $age
+            'age' => $age,
+            "admin" => $admin
         ];
         
         $users[] = $newUser;

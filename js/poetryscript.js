@@ -101,12 +101,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function getPoemPublisher(poem) {
+        
         if (poem.anonymity === 'y') {
+            if (currentUserId && poem.authorid == currentUserId) {
+                if (poem.authorid && allUsers[poem.authorid]) {
+                    return `${safeHtml(allUsers[poem.authorid])} (анонимно)`;
+                }
+            }
             return 'Аноним';
         }
+
         if (poem.authorid && allUsers[poem.authorid]) {
-            return allUsers[poem.authorid];
+            return safeHtml(allUsers[poem.authorid]);
         }
+
         return '?';
     }
     
@@ -121,14 +129,14 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (currentFilters.author) {
                 const authorName = getPoemAuthor(poem);
-                if (!authorName.toLowerCase().includes(currentFilters.author.toLowerCase())) {
+                if (authorName.toLowerCase() !== currentFilters.author.toLowerCase()) {
                     return false;
                 }
             }
             
             if (currentFilters.publisher) {
                 const publisherName = getPoemPublisher(poem);
-                if (!publisherName.toLowerCase().includes(currentFilters.publisher.toLowerCase())) {
+                if (publisherName.toLowerCase() !== currentFilters.publisher.toLowerCase() && publisherName.toLowerCase().replace(' (анонимно)', '') !== currentFilters.publisher.toLowerCase()) {
                     return false;
                 }
             }
@@ -203,6 +211,18 @@ document.addEventListener('DOMContentLoaded', function() {
         const safeDescription = poem.description ? safeHtml(poem.description).replace(/\n/g, '<br>') : '';
         const safeAuthor = safeHtml(authorName);
         const safePublisher = safeHtml(publisherName);
+        
+        let deleteButtonHtml = '';
+        if (isAdmin === "y" || (currentUserId && poem.authorid == currentUserId)) {
+            deleteButtonHtml = `
+                <form method="POST" onsubmit="return confirm('Вы уверены, что хотите удалить это стихотворение?');">
+                    <input type="hidden" name="poem_id" value="${poem.id}">
+                    <button type="submit" name="delete_poem">
+                        Удалить стихотворение
+                    </button>
+                </form>
+            `;
+        }
 
         container.innerHTML = `
             <h2>${safeTitle}</h2>
@@ -214,6 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p><strong>Опубликовал:</strong> ${safePublisher}</p>
                 <p><strong>Дата публикации:</strong> ${date}</p>
             </div>
+            ${deleteButtonHtml}
         `;
     }
     
@@ -225,14 +246,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (filterAuthor) {
         const authorSelect = document.getElementById('authorSelect');
-        if (authorSelect && authorSelect.querySelector(`option[value="${filterAuthor}"]`)) {
-            authorSelect.value = filterAuthor;
-        }
+        authorSelect.addEventListener('change', function() {
+            currentFilters.author = this.value;
+            searchAuthor.value = this.value;
+            displayPoemsList();
+        });
         
-        const searchAuthor = document.getElementById('searchAuthor');
-        if (searchAuthor) {
-            searchAuthor.value = filterAuthor;
-        }
+        const publisherSelect = document.getElementById('publisherSelect');
+        publisherSelect.addEventListener('change', function() {
+            currentFilters.publisher = this.value;
+            searchPublisher.value = this.value;
+            displayPoemsList();
+        });
     }
     
     if (selectedPoemId) {
@@ -246,6 +271,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 activeItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }, 100);
+    }
+    
+    if (filterPublisher) {
+        const searchPublisher = document.getElementById('searchPublisher');
+        if (searchPublisher) {
+            searchPublisher.value = filterPublisher;
+            currentFilters.publisher = filterPublisher;
+            displayPoemsList();
+        }
     }
     
 });

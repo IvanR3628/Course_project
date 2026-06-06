@@ -25,6 +25,12 @@
     $username = $_SESSION['user_username'];
     $id = $_SESSION['user_id'];
 
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['yourpoetry'])) {
+        $publisherName = $username;
+        header("Location: read.php?publisher=" . urlencode($publisherName));
+        exit;
+    }
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
         writeLog('Пользователь вышел из системы', $username, $id);
         $_SESSION = array();
@@ -75,6 +81,7 @@
                         <h1>Добро пожаловать, <?php echo $_SESSION['user_username']; ?>!</h1>
                     </div>
                     <div>
+                        <button type="submit" name="yourpoetry">Открыть свои стихи</button>
                         <button type="submit" name="logout">Выйти из аккаунта</button>
                         <button type="submit" name="editprofile">Редактировать информацию</button>
                     </div>
