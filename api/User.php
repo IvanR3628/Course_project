@@ -10,6 +10,7 @@
         $file = dirname(__DIR__) . '\data\users.json';
         $data = json_decode(file_get_contents($file), true);
         if (!$data || !isset($data['users'])) {
+            createFile();
             return [];
         }
         return $data['users'];
@@ -68,7 +69,7 @@
         return ['user' => $newUser];
     }
 
-    function checkUser($name, $email, $password){
+    function checkUser($username, $email, $password){
         $users = getUsers();
         foreach ($users as $user) {
             if ($user['username'] === $username && $user['email'] === $email && password_verify($password, $user['password_hash'])) {
@@ -94,15 +95,19 @@
             return ['error' => true];
         }
         
-        if (isset($data['name'])) {
-            $users[$index]['name'] = $data['name'];
+        if (isset($data['username'])) {
+            $users[$index]['username'] = $data['username'];
         }
         if (isset($data['email'])) {
             $users[$index]['email'] = $data['email'];
         }
+        if (array_key_exists('age', $data)) {
+            $users[$index]['age'] = $data['age'];
+        }
         if (isset($data['password'])) {
             $users[$index]['password_hash'] = password_hash($data['password'], PASSWORD_DEFAULT);
         }
+        
         
         saveAllUsers($users);
         return ['user' => $users[$index]];

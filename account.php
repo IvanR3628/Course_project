@@ -25,11 +25,16 @@
     $username = $_SESSION['user_username'];
     $id = $_SESSION['user_id'];
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
         writeLog('Пользователь вышел из системы', $username, $id);
         $_SESSION = array();
         session_destroy();
         header('Location: login.php');
+        exit;
+    }
+    
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editprofile'])) {
+        header('Location: editprofile.php');
         exit;
     }
 
@@ -70,7 +75,8 @@
                         <h1>Добро пожаловать, <?php echo $_SESSION['user_username']; ?>!</h1>
                     </div>
                     <div>
-                        <button type="submit">Выйти из аккаунта</button>
+                        <button type="submit" name="logout">Выйти из аккаунта</button>
+                        <button type="submit" name="editprofile">Редактировать информацию</button>
                     </div>
                 </form>
             </div>

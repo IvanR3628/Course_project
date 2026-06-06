@@ -25,10 +25,10 @@
     $allPoems = getPoetry();
 
     if ($userAge == null || $userAge < 18) {
-            $allpoems = array_filter($allpoems, function($poem) {
+            $allPoems = array_filter($allPoems, function($poem) {
                 return $poem['age'] != 'y';
             });
-            $allpoems = array_values($allpoems);
+            $allPoems = array_values($allPoems);
         }
 
     usort($allPoems, function($a, $b) {
@@ -107,7 +107,7 @@
                                                 if ($user) {
                                                     $authorName = $user['username'];
                                                 } else {
-                                                    $authorName = 'Неизвестный';
+                                                    $authorName = '?';
                                                 }
                                             }
                                         
@@ -131,7 +131,7 @@
                 </div>
                 
                 <div>
-                    <h2>Авторы</h2>
+                    <h2>Случайные авторы</h2>
                     <div class="itemscontainer">
                         <?php foreach ($randomAuthors as $author): ?>
                             <div class="itemcard" data-type="author" data-name="<?php echo htmlspecialchars($author); ?>">

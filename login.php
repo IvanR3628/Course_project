@@ -11,12 +11,7 @@
 
     $email = "";
     $password = "";
-    $u = json_decode(file_get_contents('data/users.json'), true);
-    if (!$u){
-        createFile();
-        $u = json_decode(file_get_contents('data/users.json'), true);
-    }
-    $users = $u['users'];
+    $users = getUsers();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST'){
         $email = trim($_POST['email']);
@@ -32,7 +27,7 @@
                     exit;
                 } else {
                     $error = "Неверный пароль";
-                    exit;
+                    header('Location: login.php');
                 }
             }
         }
