@@ -11,8 +11,7 @@
     $filterAuthor = isset($_GET['author']) ? $_GET['author'] : null;
     $filterPublisher = isset($_GET['publisher']) ? $_GET['publisher'] : null;
 
-
-    $poems = getPoetry();
+    $poems = getPoems();
 
     $users = getUsers();
     $usersById = [];
@@ -26,16 +25,18 @@
 
     if (isset($_SESSION['user_id'])) {
         $user = findUserById($_SESSION['user_id']);
-        if ($user){
-            $regDate = strtotime($user['registrationdate']);
-            $currentDate = time();
-            $timeDiff = $currentDate - $regDate;
-            $hoursPassed = $timeDiff / 3600;
-            if ($hoursPassed >= 24) {
+        if ($user) {
+            if ((time() - strtotime($user['registrationdate'])) / 3600 >= 23) {
                 $canWrite = true;
             }
             $userAge = (int)$user['age'];
             $isAdmin = $user['admin'];
+        } else {
+            $_SESSION = array();
+            session_destroy();
+            
+            header('Location: read.php');
+            exit;
         }
     }
 
@@ -61,12 +62,16 @@
             $user = findUserById($poem['authorid']);
             if ($user) {
                 $authors[] = $user['username'];
+            } else {
+                $authors[] = 'Удалённый автор';
             }
         }
         if ($poem['anonymity'] == 'n') {
             $user = findUserById($poem['authorid']);
             if ($user) {
                 $publishers[] = $user['username'];
+            } else {
+                $publishers[] = 'Удалённый публикатор';
             }
         } else {
             $publishers[] = 'Аноним';
@@ -80,11 +85,16 @@
         $poemId = (int)$_POST['poem_id'];
         $poem = findPoemById($poemId);
         
-        if ($poem && ($isAdmin === 'y' || $poem['authorid'] == $_SESSION['user_id'])) {
+        if ($poem) {
+            if ($isAdmin === 'y' || $poem['authorid'] == $_SESSION['user_id']){
+                deletePoemById($poemId);
+                header('Location: read.php');
+            } else {
+                
+            }
+        } else {
             
-            deletePoemById($poemId);
             header('Location: read.php');
-            exit;
         }
     }
 
@@ -95,7 +105,7 @@
         <meta charset="UTF-8">
         <title>Стихотвория – Читать</title>
         <link rel="stylesheet" type="text/css" href="css/style.css">
-        <link rel="stylesheet" type="text/css" href="css/poetrystyle.css">
+        <link rel="stylesheet" type="text/css" href="css/readstyle.css">
     </head>
     <body>
         <?php if (isset($_SESSION['user_id'])): ?>
@@ -121,17 +131,15 @@
             </div>
 
             <div class="poetrycontainer">
-                
-            <div>
-                
+
                 <div id="filtersContent">
                     <h2>Фильтры</h2>
-                    
+
                     <div>
                         <label for="searchTitle">Поиск по названию:</label>
                         <input type="text" id="searchTitle" placeholder="Введите название...">
                     </div>
-                    
+
                     <div>
                         <label for="searchAuthor">Автор:</label>
                         <input type="text" id="searchAuthor" placeholder="Введите автора...">
@@ -142,7 +150,7 @@
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    
+
                     <div>
                         <label for="searchPublisher">Кто опубликовал:</label>
                         <input type="text" id="searchPublisher" placeholder="Введите имя...">
@@ -153,12 +161,12 @@
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    
+
                     <div>
                         <label for="searchDescription">Поиск по описанию:</label>
                         <input type="text" id="searchDescription" placeholder="Введите ключевые слова...">
                     </div>
-                    
+
                     <div>
                         <label>Сортировка:</label>
                         <select id="sortBy">
@@ -166,24 +174,24 @@
                             <option value="oldest">Сначала старые</option>
                         </select>
                     </div>
-                    
+
                     <button id="resetFiltersButton">Сбросить фильтры</button>
                 </div>
-            </div>
 
-            <div class="poemslist">
-                <h2>Все стихотворения</h2>
-                <div id="poemsListContainer" class="poemscontainer">
-                    Excuse me sir
+                <div class="poemslist">
+                    <h2>Все стихотворения</h2>
+                    <div id="poemsListContainer" class="poemscontainer">
+                        Excuse me sir
+                    </div>
                 </div>
-            </div>
 
-            <div class="poemview">
-                <div id="poemViewContent">
-                    <p>Выберите стихотворение из списка слева</p>
+                <div class="poemview">
+                    <div id="poemViewContent">
+                        <p>Выберите стихотворение из списка слева</p>
+                    </div>
                 </div>
+                
             </div>
-        </div>
 
             <div class = "copyright">
                 <hr>
@@ -197,8 +205,7 @@
             const allUsers = <?php echo json_encode($usersById); ?>;
             const currentUserId = <?php echo isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'null'; ?>;
             const isAdmin = <?php echo json_encode($isAdmin); ?>;
-            const filterPublisher = <?php echo json_encode($filterPublisher); ?>;
         </script>
-        <script src="js/poetryscript.js"></script>
+        <script src="js/readscript.js"></script>
     </body>
 </html>

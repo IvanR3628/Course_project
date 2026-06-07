@@ -12,26 +12,28 @@
 
     if (isset($_SESSION['user_id'])) {
         $user = findUserById($_SESSION['user_id']);
-        if ($user){
-            $regDate = strtotime($user['registrationdate']);
-            $currentDate = time();
-            $timeDiff = $currentDate - $regDate;
-            $hoursPassed = $timeDiff / 3600;
-            if ($hoursPassed >= 24) {
+        if ($user) {
+            if ((time() - strtotime($user['registrationdate'])) / 3600 >= 23) {
                 $canWrite = true;
             }
             $userAge = (int)$user['age'];
+        } else {
+            $_SESSION = array();
+            session_destroy();
+            
+            header('Location: index.php');
+            exit;
         }
     }
 
-    $allPoems = getPoetry();
+    $allPoems = getPoems();
 
     if ($userAge == null || $userAge < 18) {
-            $allPoems = array_filter($allPoems, function($poem) {
-                return $poem['unsafeage'] != 'y';
-            });
-            $allPoems = array_values($allPoems);
-        }
+        $allPoems = array_filter($allPoems, function($poem) {
+            return $poem['unsafeage'] != 'y';
+        });
+        $allPoems = array_values($allPoems);
+    }
 
     usort($allPoems, function($a, $b) {
         return strtotime($b['changedate']) - strtotime($a['changedate']);
@@ -65,6 +67,7 @@
         <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
     <body>
+        
         <?php if (isset($_SESSION['user_id'])): ?>
             <?php if ($canWrite): ?>
                     <button onclick="location.href='write.php'" class="writebutton">
@@ -80,6 +83,7 @@
                     Начать творить
                 </button>
         <?php endif; ?>
+        
         <div class="page">
             
             <div class="headline">
@@ -89,60 +93,52 @@
 
             <div class = "center">
                 <h1>Стихотвория</h1>
-                
-                <div>
-                    <div>
-                        <h2>Последние произведения</h2>
-                        <div class="itemscontainer">
-                            <?php foreach ($latestPoems as $poem): ?>
-                                <div class="itemcard" data-type="poem" data-id="<?php echo $poem['id']; ?>">
-                                    <div><?php echo htmlspecialchars($poem['title']); ?></div>
-                                    <div>
-                                        
-                                        <?php
-                                            if (!empty($poem['author'])) {
-                                                $authorName = $poem['author'];
-                                            } else if ($poem['anonymity'] == 'y') {
-                                                $authorName = 'Аноним';
-                                            } else {
-                                                $user = findUserById($poem['authorid']);
-                                                if ($user) {
-                                                    $authorName = $user['username'];
-                                                } else {
-                                                    $authorName = '?';
-                                                }
-                                            }
-                                        
-                                            if ($poem['anonymity'] == 'n') {
-                                                $user = findUserById($poem['authorid']);
-                                                $publisherName = $user ? $user['username'] : '?';
-                                            } else {
-                                                $publisherName = 'Аноним';
-                                            }
-                                        ?>
-                                        
-                                        <span><?php echo htmlspecialchars($authorName); ?></span>
-                                        <span>| <?php echo htmlspecialchars($publisherName); ?></span>
-                                        <span>| <?php echo date('d.m.Y', strtotime($poem['changedate'])); ?></span>
-                                        
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    </div>
-                </div>
-                
-                <div>
-                    <h2>Случайные авторы</h2>
-                    <div class="itemscontainer">
-                        <?php foreach ($randomAuthors as $author): ?>
-                            <div class="itemcard" data-type="author" data-name="<?php echo htmlspecialchars($author); ?>">
-                                <div><?php echo htmlspecialchars($author); ?></div>
+                <h2>Последние произведения</h2>
+                <div class="itemscontainer">
+                    <?php foreach ($latestPoems as $poem): ?>
+                        <div class="itemcard" data-type="poem" data-id="<?php echo $poem['id']; ?>">
+                            <div><?php echo htmlspecialchars($poem['title']) . ($poem['unsafeage'] === 'y' ? ' (18+)' : ''); ?></div>
+                            <div>
+
+                                <?php
+                                    if (!empty($poem['author'])) {
+                                        $authorName = $poem['author'];
+                                    } else if ($poem['anonymity'] == 'y') {
+                                        $authorName = 'Аноним';
+                                    } else {
+                                        $user = findUserById($poem['authorid']);
+                                        if ($user) {
+                                            $authorName = $user['username'];
+                                        } else {
+                                            $authorName = 'Удалённый автор';
+                                        }
+                                    }
+
+                                    if ($poem['anonymity'] == 'n') {
+                                        $user = findUserById($poem['authorid']);
+                                        $publisherName = $user ? $user['username'] : 'Удалённый публикатор';
+                                    } else {
+                                        $publisherName = 'Аноним';
+                                    }
+                                ?>
+
+                                <span><?php echo htmlspecialchars($authorName); ?></span>
+                                <span>| <?php echo htmlspecialchars($publisherName); ?></span>
+                                <span>| <?php echo date('d.m.Y', strtotime($poem['changedate'])); ?></span>
+
                             </div>
-                        <?php endforeach; ?>
-                    </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-                
+
+                <h2>Случайные авторы</h2>
+                <div class="itemscontainer">
+                    <?php foreach ($randomAuthors as $author): ?>
+                        <div class="itemcard" data-type="author" data-name="<?php echo htmlspecialchars($author); ?>">
+                            <div><?php echo htmlspecialchars($author); ?></div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
                 
             </div>
 

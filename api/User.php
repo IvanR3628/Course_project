@@ -32,11 +32,6 @@
         return true;
     }
 
-    function validDate($date){
-        $d = DateTime::createFromFormat('Y-m-d H:i:s', $date);
-        return $d && $d->format('Y-m-d H:i:s') === $date;
-    }
-
     function findUserById($id) {
         $users = getUsers();
         foreach ($users as $user) {

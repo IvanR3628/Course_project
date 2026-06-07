@@ -11,7 +11,7 @@
     } else {
         $user = findUserById($_SESSION['user_id']);
         if ($user){
-            if ((time() - strtotime($user['registrationdate'])) / 3600 >= 24) {
+            if ((time() - strtotime($user['registrationdate'])) / 3600 >= 23) {
                 $canWrite = true;
             }
         } else {
@@ -53,6 +53,7 @@
         <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
     <body>
+        
         <?php if (isset($_SESSION['user_id'])): ?>
             <?php if ($canWrite): ?>
                     <button onclick="location.href='write.php'" class="writebutton">
@@ -68,8 +69,9 @@
                     Начать творить
                 </button>
         <?php endif; ?>
+        
         <div class="page">
-            
+
             <div class="headline">
                 <a href="index.php">Главная</a> <a href="read.php">Читать</a> <a href="login.php">Аккаунт</a>
                 <hr>
