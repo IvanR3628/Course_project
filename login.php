@@ -1,13 +1,13 @@
 <?php
 
     session_start();
+    require_once 'api/Controller.php';
 
     if (isset($_SESSION['user_id'])) {
         header('Location: account.php');
         exit;
     }
 
-    require_once 'api/UserController.php';
 
     $email = "";
     $password = "";
@@ -22,7 +22,7 @@
                 if (password_verify($password, $user['password_hash'])){
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['user_username'] = $user['username'];
-                    writeLog("Пользователь успешно авторизовался", $user['username'], $user['id']);
+                    
                     header('Location: account.php');
                     exit;
                 } else {
@@ -32,10 +32,10 @@
             }
         }
         if (!isset($userexist)){
-            writelog("Пользователя не существует", $email);
+            
         }
         if (isset($error)){
-            writelog($error, $email);
+            
         }
     }
 

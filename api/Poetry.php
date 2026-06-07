@@ -1,6 +1,6 @@
 <?php
 
-    function createPFile() {
+    function createPoetryFile() {
         $file = dirname(__DIR__) . '\data\poetry.json';
         $data = ['poetry' => []];
         file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT));
@@ -10,13 +10,18 @@
         $file = dirname(__DIR__) . '\data\poetry.json';
         $data = json_decode(file_get_contents($file), true);
         if (!$data || !isset($data['poetry'])) {
-            createPFile();
+            createPoetryFile();
             return [];
         }
         return $data['poetry'];
     }
 
-    function findPoemId($id) {
+    function saveAllPoetry($poetry) {
+        $file = dirname(__DIR__) . '\data\poetry.json';
+        file_put_contents($file, json_encode(['poetry' => $poetry], JSON_PRETTY_PRINT));
+    }
+
+    function findPoemById($id) {
         $poetry = getPoetry();
         foreach ($poetry as $poem) {
             if ($poem['id'] == $id) {
@@ -26,12 +31,7 @@
         return null;
     }
 
-    function saveAllPoetry($poetry) {
-        $file = dirname(__DIR__) . '\data\poetry.json';
-        file_put_contents($file, json_encode(['poetry' => $poetry], JSON_PRETTY_PRINT));
-    }
-
-    function createNewPoetry($title, $content, $description, $authorid, $anonymity, $author, $age){
+    function createNewPoetry($title, $content, $description, $authorid, $anonymity, $author, $unsafeage){
         $poetry = getPoetry();
         if (count($poetry) === 0){
             $newId = 1;
@@ -46,7 +46,7 @@
             'authorid' => $authorid,
             'anonymity' => $anonymity,
             'author' => $author,
-            'age' => $age,
+            'unsafeage' => $unsafeage,
             'changedate' => date('Y-m-d H:i:s', strtotime('+1 hour'))
         ];
         
@@ -55,21 +55,7 @@
         return ['poetry' => $newPoetry];
     }
 
-    function writePLog($message, $title = "", $id = 0){
-        $log = dirname(__DIR__) . '\data\auth.log';
-        $time = date('Y-m-d H:i:s', strtotime('+1 hour'));
-        $line = $time . " | ";
-        if ($title != ""){
-            $line = $line . "title: " . $title . " | ";
-        }
-        if ($id != 0){
-            $line = $line . "id: " . $id . " | ";
-        }
-        $line = $line . $message . "\n";
-        file_put_contents($log, $line, FILE_APPEND);
-    }
-
-    function deletePoetryID($id){
+    function deletePoemById($id){
         $allpoetry = getPoetry();
         $index = -1;
 
@@ -78,10 +64,6 @@
                 $index = $key;
                 break;
             }
-        }
-        
-        if ($index === -1) {
-            return ['error' => true];
         }
         
         $deletedPoetry = $allpoetry[$index];

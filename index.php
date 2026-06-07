@@ -1,15 +1,17 @@
 <?php
 
     session_start();
-
-    require_once 'api/User.php';
-    require_once 'api/Poetry.php';
-
-    $canWrite = false;
+    require_once 'api/Controller.php';
 
     $userAge = null;
+    $canWrite = false;
+
+    if (filesize('data/poetry.json') == 0) {
+        createPoetryFile();
+    }
+
     if (isset($_SESSION['user_id'])) {
-        $user = findUserId($_SESSION['user_id']);
+        $user = findUserById($_SESSION['user_id']);
         if ($user){
             $regDate = strtotime($user['registrationdate']);
             $currentDate = time();
@@ -26,7 +28,7 @@
 
     if ($userAge == null || $userAge < 18) {
             $allPoems = array_filter($allPoems, function($poem) {
-                return $poem['age'] != 'y';
+                return $poem['unsafeage'] != 'y';
             });
             $allPoems = array_values($allPoems);
         }
@@ -43,7 +45,7 @@
         if (!empty($poem['author'])) {
             $authorsList[] = $poem['author'];
         } else if ($poem['anonymity'] != 'y') {
-            $user = findUserId($poem['authorid']);
+            $user = findUserById($poem['authorid']);
             if ($user) {
                 $authorsList[] = $user['username'];
             }
@@ -103,7 +105,7 @@
                                             } else if ($poem['anonymity'] == 'y') {
                                                 $authorName = 'Аноним';
                                             } else {
-                                                $user = findUserId($poem['authorid']);
+                                                $user = findUserById($poem['authorid']);
                                                 if ($user) {
                                                     $authorName = $user['username'];
                                                 } else {
@@ -112,7 +114,7 @@
                                             }
                                         
                                             if ($poem['anonymity'] == 'n') {
-                                                $user = findUserId($poem['authorid']);
+                                                $user = findUserById($poem['authorid']);
                                                 $publisherName = $user ? $user['username'] : '?';
                                             } else {
                                                 $publisherName = 'Аноним';

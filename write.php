@@ -1,17 +1,15 @@
 <?php
 
     session_start();
-
-    require_once 'api/UserController.php';
-    require_once 'api/Poetry.php';
+    require_once 'api/Controller.php';
 
     if (filesize('data/poetry.json') == 0) {
-        createPFile();
+        createPoetryFile();
     }
 
     $userAge = null;
     if (isset($_SESSION['user_id'])) {
-        $user = findUserId($_SESSION['user_id']);
+        $user = findUserById($_SESSION['user_id']);
         if ($user && isset($user['age'])) {
             $userAge = (int)$user['age'];
         }
@@ -35,14 +33,14 @@
         } else {
             $anonymity = "y";
         }
-        if ($_POST['adult'] === "1"){
-            $age = "y";
+        if ($_POST['unsafeage'] === "1"){
+            $unsafeage = "y";
         } else {
-            $age = "n";
+            $unsafeage = "n";
         }
         if ($_POST['action'] === "publish"){
-            $result = createNewPoetry($title, $content, $description, $authorid, $anonymity, $author, $age);
-            writePLog('Создано новое стихотворение', $result['poetry']['title'], $result['poetry']['id']);
+            $result = createNewPoetry($title, $content, $description, $authorid, $anonymity, $author, $unsafeage);
+            
             header('Location: write.php');
             exit;
         }
@@ -125,18 +123,18 @@
                                 <label>Возрастное ограничение:</label>
                                 <div>
                                     <label>
-                                        <input type="radio" name="adult" value="0" checked>
+                                        <input type="radio" name="unsafeage" value="0" checked>
                                         Для всех возрастов
                                     </label>
                                     <br>
                                     <label>
-                                        <input type="radio" name="adult" value="1">
+                                        <input type="radio" name="unsafeage" value="1">
                                         18+ (содержит взрослый контент)
                                     </label>
                                 </div>
                             </div>
                             <?php else: ?>
-                                <input type="hidden" name="adult" value="0">
+                                <input type="hidden" name="unsafeage" value="0">
                             <?php endif; ?>
                             
 

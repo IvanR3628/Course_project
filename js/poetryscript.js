@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="poemitem ${isActive}" data-poem-id="${poem.id}">
                     <div>
                         ${safeHtml(poem.title)}
-                        ${poem.age == 'y' ? '<span">18+</span>' : ''}
+                        ${poem.unsafeage == 'y' ? '<span">(18+)</span>' : ''}
                     </div>
                     <div>
                         <span>${safeHtml(authorName)}</span>
@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         container.innerHTML = `
             <h2>${safeTitle}</h2>
-            ${poem.age == 'y' ? '<div>Контент для взрослых (18+)</div><br>' : ''}
+            ${poem.unsafeage == 'y' ? '<div>Контент для взрослых (18+)</div><br>' : ''}
             <div>${safeContent}</div>
             <div>
                 ${poem.description ? `<p><strong>Описание:</strong> ${safeDescription}</p>` : '<p><strong>Нет описания</strong></p>'}

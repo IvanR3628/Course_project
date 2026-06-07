@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const description = document.getElementById('description').value;
             const author = document.getElementById('author').value;
             const publish_as = document.querySelector('input[name="publish_as"]:checked').value;
-            const adult = document.querySelector('input[name="adult"]:checked').value;
+            const unsafeage = document.querySelector('input[name="unsafeage"]:checked').value;
             
             if (!title || !content) {
                 alert('Для сохранения черновика нужны название и текст стихотворения.');
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 description: description,
                 author: author,
                 publish_as: publish_as,
-                adult: adult,
+                unsafeage: unsafeage,
                 timestamp: new Date().toLocaleString()
             };
             
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const radio = document.querySelector(`input[name="publish_as"][value="${draft.publish_as}"]`);
             if (radio) radio.checked = true;
-            const radio2 = document.querySelector(`input[name="adult"][value="${draft.adult}"]`);
+            const radio2 = document.querySelector(`input[name="unsafeage"][value="${draft.unsafeage}"]`);
             if (radio2) radio2.checked = true;
             
         });

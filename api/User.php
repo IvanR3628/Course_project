@@ -1,6 +1,6 @@
 <?php
 
-    function createFile() {
+    function createUsersFile() {
         $file = dirname(__DIR__) . '\data\users.json';
         $data = ['users' => []];
         file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT));
@@ -10,13 +10,34 @@
         $file = dirname(__DIR__) . '\data\users.json';
         $data = json_decode(file_get_contents($file), true);
         if (!$data || !isset($data['users'])) {
-            createFile();
+            createUsersFile();
             return [];
         }
         return $data['users'];
     }
 
-    function findUserId($id) {
+    function saveAllUsers($users) {
+        $file = dirname(__DIR__) . '\data\users.json';
+        file_put_contents($file, json_encode(['users' => $users], JSON_PRETTY_PRINT));
+    }
+
+    function validUsername($username){
+        return preg_match('/^[a-zA-Zа-яА-Я0-9_-]{2,100}$/', $username);
+    }
+
+    function validEmail($email){
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+        return true;
+    }
+
+    function validDate($date){
+        $d = DateTime::createFromFormat('Y-m-d H:i:s', $date);
+        return $d && $d->format('Y-m-d H:i:s') === $date;
+    }
+
+    function findUserById($id) {
         $users = getUsers();
         foreach ($users as $user) {
             if ($user['id'] == $id) {
@@ -26,7 +47,7 @@
         return null;
     }
 
-    function findUserEmail($email){
+    function findUserByEmail($email){
         $users = getUsers();
         foreach ($users as $user) {
             if ($user['email'] === $email) {
@@ -36,31 +57,20 @@
         return null;
     }
 
-    function saveAllUsers($users) {
-        $file = dirname(__DIR__) . '\data\users.json';
-        file_put_contents($file, json_encode(['users' => $users], JSON_PRETTY_PRINT));
-    }
-
     function createNewUser($username, $email, $password, $age = "", $admin = "n") {
         $users = getUsers();
-        if (findUserEmail($email)) {
-            return ['error' => true];
-        }
         if (count($users) === 0){
             $newId = 1;
         } else {
             $newId = $users[count($users) - 1]['id'] + 1;
         }
-        if ($age == "") {
-            $age = null;
-        }
         $newUser = [
             'id' => $newId,
             'username' => $username,
             'email' => $email,
+            'age' => $age == "" ? null : $age,
             'password_hash' => password_hash($password, PASSWORD_DEFAULT),
             'registrationdate' => date('Y-m-d H:i:s', strtotime('+1 hour')),
-            'age' => $age,
             "admin" => $admin
         ];
         
@@ -70,18 +80,7 @@
         return ['user' => $newUser];
     }
 
-    function checkUser($username, $email, $password){
-        $users = getUsers();
-        foreach ($users as $user) {
-            if ($user['username'] === $username && $user['email'] === $email && password_verify($password, $user['password_hash'])) {
-                return ['user' => $user];
-                break;
-            }
-        }
-        return ['error' => true];
-    }
-
-    function updateUserId($id, $data){
+    function updateUserById($id, $data){
         $users = getUsers();
         $index = -1;
 
@@ -90,10 +89,6 @@
                 $index = $key;
                 break;
             }
-        }
-        
-        if ($index === -1) {
-            return ['error' => true];
         }
         
         if (isset($data['username'])) {
@@ -108,14 +103,18 @@
         if (isset($data['password'])) {
             $users[$index]['password_hash'] = password_hash($data['password'], PASSWORD_DEFAULT);
         }
-        
+        if (isset($data['registrationdate'])){
+            $users[$index]['registrationdate'] = $data['registrationdate'];
+        }
+        if (isset($data['admin'])){
+            $users[$index]['admin'] = $data['admin'];
+        }
         
         saveAllUsers($users);
         return ['user' => $users[$index]];
-        
     }
 
-    function deleteUserID($id){
+    function deleteUserById($id){
         $users = getUsers();
         $index = -1;
 
@@ -126,13 +125,8 @@
             }
         }
         
-        if ($index === -1) {
-            return ['error' => true];
-        }
-        
         $deletedUser = $users[$index];
         array_splice($users, $index, 1);
-        
         saveAllUsers($users);
         return ['user' => $deletedUser];
     }
