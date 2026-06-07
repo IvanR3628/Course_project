@@ -1,16 +1,19 @@
 const urlParams = new URLSearchParams(window.location.search);
+
 const urlPoemId = urlParams.get('poem_id');
 const urlFilterAuthor = urlParams.get('author');
+const urlFilterPublisher = urlParams.get('publisher');
 
 const selectedPoemId = urlPoemId && !isNaN(parseInt(urlPoemId)) ? parseInt(urlPoemId) : null;
 const filterAuthor = urlFilterAuthor && urlFilterAuthor.trim() !== '' ? urlFilterAuthor : null;
+const filterPublisher = urlFilterPublisher && urlFilterPublisher.trim() !== '' ? urlFilterPublisher : null;
 
 let currentSelectedPoemId = selectedPoemId;
 
 let currentFilters = {
     title: '',
     author: filterAuthor || '',
-    publisher: '',
+    publisher: filterPublisher || '',
     description: '',
     sortBy: 'newest'
 };

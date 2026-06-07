@@ -6,7 +6,7 @@
         file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT));
     }
 
-    function getPoetry() {
+    function getPoems() {
         $file = dirname(__DIR__) . '\data\poetry.json';
         $data = json_decode(file_get_contents($file), true);
         if (!$data || !isset($data['poetry'])) {
@@ -16,14 +16,14 @@
         return $data['poetry'];
     }
 
-    function saveAllPoetry($poetry) {
+    function saveAllPoems($poems) {
         $file = dirname(__DIR__) . '\data\poetry.json';
-        file_put_contents($file, json_encode(['poetry' => $poetry], JSON_PRETTY_PRINT));
+        file_put_contents($file, json_encode(['poetry' => $poems], JSON_PRETTY_PRINT));
     }
 
     function findPoemById($id) {
-        $poetry = getPoetry();
-        foreach ($poetry as $poem) {
+        $poems = getPoems();
+        foreach ($poems as $poem) {
             if ($poem['id'] == $id) {
                 return $poem;
             }
@@ -31,14 +31,14 @@
         return null;
     }
 
-    function createNewPoetry($title, $content, $description, $authorid, $anonymity, $author, $unsafeage){
-        $poetry = getPoetry();
-        if (count($poetry) === 0){
+    function createNewPoem($title, $content, $authorid, $description = "", $anonymity = "n", $author = "", $unsafeage = "n"){
+        $poems = getPoems();
+        if (count($poems) === 0){
             $newId = 1;
         } else {
-            $newId = $poetry[count($poetry) - 1]['id'] + 1;
+            $newId = $poems[count($poems) - 1]['id'] + 1;
         }
-        $newPoetry = [
+        $newPoem = [
             'id' => $newId,
             'title' => $title,
             'content' => $content,
@@ -50,27 +50,69 @@
             'changedate' => date('Y-m-d H:i:s', strtotime('+1 hour'))
         ];
         
-        $poetry[] = $newPoetry;
-        saveAllPoetry($poetry);
-        return ['poetry' => $newPoetry];
+        $poems[] = $newPoem;
+        saveAllPoems($poems);
+        return ['poem' => $newPoem];
     }
 
-    function deletePoemById($id){
-        $allpoetry = getPoetry();
+    function updatePoemById($id, $data){
+        $allpoems = getPoems();
         $index = -1;
 
-        foreach ($allpoetry as $key => $poetry) {
-            if ($poetry['id'] == $id) {
+        foreach ($allpoems as $key => $poem) {
+            if ($poem['id'] == $id) {
                 $index = $key;
                 break;
             }
         }
         
-        $deletedPoetry = $allpoetry[$index];
-        array_splice($allpoetry, $index, 1);
+        if (isset($data['title'])) {
+            $allpoems[$index]['title'] = $data['title'];
+        }
+        if (isset($data['content'])) {
+            $allpoems[$index]['content'] = $data['content'];
+        }
+        if (isset($data['description'])) {
+            $allpoems[$index]['description'] = $data['description'];
+        }
+        if (isset($data['authorid'])) {
+            $allpoems[$index]['authorid'] = $data['authorid'];
+        }
+        if (isset($data['anonymity'])) {
+            $allpoems[$index]['anonymity'] = $data['anonymity'];
+        }
+        if (isset($data['author'])) {
+            $allpoems[$index]['author'] = $data['author'];
+        }
+        if (isset($data['unsafeage'])) {
+            $allpoems[$index]['unsafeage'] = $data['unsafeage'];
+        }
+        if (isset($data['changedate'])) {
+            $allpoems[$index]['changedate'] = $data['changedate'];
+        }
         
-        saveAllPoetry($allpoetry);
-        return ['poetry' => $deletedPoetry];
+        
+        saveAllPoems($poems);
+        return ['poem' => $allpoems[$index]];
+        
+    }
+
+    function deletePoemById($id){
+        $allpoems = getPoems();
+        $index = -1;
+
+        foreach ($allpoems as $key => $poem) {
+            if ($poem['id'] == $id) {
+                $index = $key;
+                break;
+            }
+        }
+        
+        $deletedPoem = $allpoems[$index];
+        array_splice($allpoems, $index, 1);
+        
+        saveAllPoems($allpoems);
+        return ['poem' => $deletedPoem];
     }
 
 ?>

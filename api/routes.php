@@ -18,43 +18,50 @@
             exit;
         }
         
-        switch ($method) {
+        if ($action === 'users'){
+            switch ($method) {
             case 'GET':
-                if ($action === 'users') {
-                    if ($id === 0) {
-                        getAllUsers();
-                    } else {
-                        getOneUser($id);
-                    }
+                if ($id === 0) {
+                    getAllUsers();
                 } else {
-                    sendJsonResponse('error', 'Действия не существует', $request);
+                    getOneUser($id);
                 }
                 break;
             case 'POST':
-                if ($action === 'users') {
-                    createUser();
-                } else {
-                    sendJsonResponse('error', 'Действия не существует', $request);
-                }
+                createUser();
                 break;
             case 'PUT':
             case 'PATCH':
-                if ($action === 'users'){
-                    updateUser($id);
-                } else {
-                    sendJsonResponse('error', 'Действия не существует', $request);
-                }
+                updateUser($id);
                 break;
             case 'DELETE':
-                if ($action === 'users'){
-                    deleteUser($id);
-                } else {
-                    sendJsonResponse('error', 'Действия не существует', $request);
-                }
+                deleteUser($id);
                 break;
             default:
                 sendJsonResponse('error', 'Действия не существует', $request);
+            }
+        } else if ($action === 'poems'){
+            switch ($method) {
+            case 'GET':
+                if ($id === 0) {
+                    getAllPoems();
+                } else {
+                    getOnePoem($id);
+                }
+                break;
+            case 'POST':
+                createPoem();
+                break;
+            case 'DELETE':
+                deletePoem($id);
+                break;
+            default:
+                sendJsonResponse('error', 'Действия не существует', $request);
+            }
+        } else {
+            sendJsonResponse('error', 'Действия не существует', $request);
         }
+        
     }
 
 ?>

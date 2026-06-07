@@ -10,13 +10,13 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const title = document.getElementById('title').value.trim();
             const content = document.getElementById('content').value.trim();
-            const description = document.getElementById('description').value;
-            const author = document.getElementById('author').value;
+            const description = document.getElementById('description').value.trim();
+            const author = document.getElementById('author').value.trim();
             const publish_as = document.querySelector('input[name="publish_as"]:checked').value;
             const unsafeage = document.querySelector('input[name="unsafeage"]:checked').value;
             
             if (!title || !content) {
-                alert('Для сохранения черновика нужны название и текст стихотворения.');
+                alert('Для сохранения черновика нужны название и текст стихотворения');
                 return;
             }
             
@@ -32,9 +32,19 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             
             let drafts = getDrafts();
-            
+        
+            if (drafts.length >= 5) {
+                const oldestDraft = drafts[drafts.length - 1];
+
+                if (!confirm(`Будет удалён самый старый черновик (${oldestDraft.title}). Продолжить?`)) {
+                    return;
+                }
+
+                drafts.pop();
+            }
+
             drafts.unshift(draft);
-            
+
             if (drafts.length > 5) {
                 drafts = drafts.slice(0, 5);
             }
@@ -49,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (loadButton) {
         loadButton.addEventListener('click', function() {
             if (!selectedDraftId) {
-                alert('Сначала выберите черновик.');
+                alert('Сначала выберите черновик');
                 return;
             }
             
@@ -57,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const draft = drafts.find(d => d.id === selectedDraftId);
             
             if (!draft) {
-                alert('Черновик не найден!');
+                alert('Черновик не найден');
                 return;
             }
             
@@ -78,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (deleteButton) {
         deleteButton.addEventListener('click', function() {
             if (!selectedDraftId) {
-                alert('Сначала выберите черновик.');
+                alert('Сначала выберите черновик');
                 return;
             }
             
@@ -98,7 +108,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.removeItem(STORAGE_KEY);
                 selectedDraftId = null;
                 displayDrafts();
-                alert('Все черновики удалены!');
             }
         });
     }

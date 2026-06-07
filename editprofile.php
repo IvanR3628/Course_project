@@ -68,12 +68,12 @@
         $currentpassword = $_POST['password'];
         if (password_verify($currentpassword, $user['password_hash'])){
             
-            $allPoetry = getPoetry();
+            $allPoems = getPoems();
             $poemsToDelete = [];
             
-            foreach ($allPoetry as $poetry) {
-                if ($poetry['authorid'] === $_SESSION['user_id']) {
-                    $poemsToDelete[] = $poetry['id'];
+            foreach ($allPoems as $poems) {
+                if ($poems['authorid'] === $_SESSION['user_id']) {
+                    $poemsToDelete[] = $poems['id'];
                 }
             }
             
@@ -91,7 +91,6 @@
             echo    "<script>  localStorage.removeItem('poem_drafts_list_{$userId}');
                                 window.location.href = 'login.php';
                     </script>";
-            exit;
             
         } else {
             
@@ -109,6 +108,7 @@
         <link rel="stylesheet" type="text/css" href="css/loginstyle.css">
     </head>
     <body>
+        
         <div class="page">
         
             <div class="headline">
@@ -120,33 +120,33 @@
                 <form method="POST">
                     <div>
                         <label for="username">Псевдоним:</label>
-                        <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required>
+                        <input type="text" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required>
                     </div>
                     <div>
                         <label for="age">Возраст:</label>
-                        <input type="number" id="age" name="age" min="1" max="150" value="<?php echo htmlspecialchars($user['age'] ?? ''); ?>">
+                        <input type="number" name="age" min="1" max="150" value="<?php echo htmlspecialchars($user['age'] ?? ''); ?>">
                     </div>
                     <div>
                         <label for="email">Почта:</label>
-                        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+                        <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
                     </div>
                     <div>
                         <label for="password">Текущий пароль:</label>
-                        <input type="password" id="password" name="password" required>
+                        <input type="password" name="password" required>
                     </div>
                     <div>
                         <label for="password">Новый пароль:</label>
-                        <input type="password" id="newpassword" name="newpassword">
+                        <input type="password" name="newpassword">
                     </div>
                     <div>
                         <label for="password">Повторите пароль:</label>
-                        <input type="password" id="newpassword2" name="newpassword2">
+                        <input type="password" name="newpassword2">
                     </div>
                     <div>
                         <button type="submit" name="update">Обновить</button>
                         <button type="button" onclick="location.href='account.php'">Отмена</button>
                         <button type="submit" name="delete"
-                                onclick="return confirm('ВНИМАНИЕ! Вы уверены, что хотите удалить аккаунт? Это действие необратимо.')">Удалить аккаунт</button>
+                                onclick="return confirm('Вы уверены, что хотите удалить аккаунт? Это действие необратимо.')">Удалить аккаунт</button>
                     </div>
                 </form>
             </div>
@@ -155,6 +155,7 @@
                 <hr>
                 Все права защищены © 2026
             </div>
+            
         </div>
     </body>
 </html>

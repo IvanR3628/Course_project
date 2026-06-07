@@ -3,27 +3,51 @@
     session_start();
     require_once 'api/Controller.php';
 
+    $userAge = null;
+    $canWrite = false;
+
     if (filesize('data/poetry.json') == 0) {
         createPoetryFile();
     }
 
-    $userAge = null;
     if (isset($_SESSION['user_id'])) {
         $user = findUserById($_SESSION['user_id']);
-        if ($user && isset($user['age'])) {
-            $userAge = (int)$user['age'];
+        if ($user) {
+            if ((time() - strtotime($user['registrationdate'])) / 3600 >= 23) {
+                $canWrite = true;
+            }
+            if (isset($user['age'])) {
+                $userAge = (int)$user['age'];
+            }
+        } else {
+            $_SESSION = array();
+            session_destroy();
+            
+            header('Location: login.php');
+            exit;
         }
     } else {
         header('Location: login.php');
+        exit;
     }
+
+    if (!$canWrite){
+        header('Location: index.php');
+        exit;
+    }
+
     $isAdult = ($userAge !== null && $userAge >= 18);
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-        $title = trim($_POST['title']); 
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === "publish"){
+        $title = trim($_POST['title']);
         $content = trim($_POST['content']);
+        if ($title == "" || $content == ""){
+            header('Location: write.php');
+            exit;
+        }
         $description = trim($_POST['description']);
         $authorid = $_SESSION['user_id'];
-        if (isset($_POST['author']) && $_POST['author'] != ""){
+        if (isset($_POST['author']) && trim($_POST['author']) != ""){
             $author = trim($_POST['author']);
         } else {
             $author = "";
@@ -38,12 +62,14 @@
         } else {
             $unsafeage = "n";
         }
-        if ($_POST['action'] === "publish"){
-            $result = createNewPoetry($title, $content, $description, $authorid, $anonymity, $author, $unsafeage);
-            
-            header('Location: write.php');
-            exit;
-        }
+        
+        createNewPoem($title, $content, $authorid, $description, $anonymity, $author, $unsafeage);
+        
+        echo    "<script>
+                    alert('Стихотворение успешно опубликовано!');
+                    window.location.href = 'write.php';
+                </script>";
+        
     }
 
 ?>
@@ -140,7 +166,7 @@
 
                             <div class="formbuttons">
                                 <button type="submit" name="action" value="publish">Опубликовать</button>
-                                <button type="submit" name="action" value="draft" id="saveDraft">Сохранить черновик</button>
+                                <button type="submit" value="draft" id="saveDraft">Сохранить черновик</button>
                                 <button onclick="location.href='write.php'">Очистить</button>
                             </div>
                         </form>
@@ -157,7 +183,7 @@
         </div>
         
         <script>
-            const USER_ID = '<?php echo $_SESSION['user_id'] ?? 'guest'; ?>';
+            const USER_ID = '<?php echo $_SESSION['user_id']; ?>';
             const STORAGE_KEY = `poem_drafts_list_${USER_ID}`;
         </script>
         <script src="js/writescript.js"></script>

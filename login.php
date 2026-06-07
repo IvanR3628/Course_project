@@ -8,7 +8,6 @@
         exit;
     }
 
-
     $email = "";
     $password = "";
     $users = getUsers();
@@ -28,6 +27,7 @@
                 } else {
                     $error = "Неверный пароль";
                     header('Location: login.php');
+                    exit;
                 }
             }
         }
@@ -60,11 +60,11 @@
                 <form method="POST">
                     <div>
                         <label for="email">Почта:</label>
-                        <input type="text" id="email" name="email" required>
+                        <input type="text" name="email" required>
                     </div>
                     <div>
                         <label for="password">Пароль:</label>
-                        <input type="password" id="password" name="password" required>
+                        <input type="password" name="password" required>
                     </div>
                     <div>
                         <button type="submit">Войти</button>

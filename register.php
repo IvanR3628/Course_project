@@ -8,8 +8,6 @@
         exit;
     }
 
-
-    $users = getUsers();
     $age = null;
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -23,27 +21,21 @@
         $error = "false";
         if ($password !== $password2){
             $error = "Пароли не совпадают";
-        }
-        if ($error === "false" && (strlen($username) < 2 || strlen($username) > 100)) {
-            $error = "Псевдоним должен быть от 2 до 100 символов";
-        }
-        if ($error === "false" && !validEmail($email)) {
+        } else if (!validUsername($username)) {
+            $error = "Невалидный псевдоним. Убедитесь, что он содержит от 2 до 100 незапрещённых символов (русские и английские буквы, цифры, дефис и нижнее подчёркивание)";
+        } else if (!validEmail($email)) {
             $error = "Невалидный email";
-        }
-        if ($error === "false" && strlen($password) < 6) {
-            $error = "Пароль должен быть от 6 символов";
+        } else if (findUserByEmail($input['email'])) {
+            $error = "Email уже используется";
+        } else if (strlen($password) < 6) {
+            $error = "Пароль должен содержать минимум 6 символов";
         }
         
         if ($error === "false"){
             $result = createNewUser($username, $email, $password, $age);
-            if (isset($result['error'])) {
-                
-            } else {
-                $_SESSION['user_id'] = $result['user']['id'];
-                $_SESSION['user_username'] = $username;
-                
-                header('Location: account.php');
-            }
+            $_SESSION['user_id'] = $result['user']['id'];
+            $_SESSION['user_username'] = $username;
+            header('Location: account.php');
         } else {
             
         }
@@ -70,23 +62,23 @@
                 <form method="POST">
                     <div>
                         <label for="username">Псевдоним:</label>
-                        <input type="text" id="username" name="username" required>
+                        <input type="text" name="username" required>
                     </div>
                     <div>
                         <label for="age">Возраст:</label>
-                        <input type="number" id="age" name="age" min="1" max="150">
+                        <input type="number" name="age" min="1" max="150">
                     </div>
                     <div>
                         <label for="email">Почта:</label>
-                        <input type="text" id="email" name="email" required>
+                        <input type="text" name="email" required>
                     </div>
                     <div>
                         <label for="password">Пароль:</label>
-                        <input type="password" id="password" name="password" required>
+                        <input type="password" name="password" required>
                     </div>
                     <div>
                         <label for="password">Повторите пароль:</label>
-                        <input type="password" id="password2" name="password2" required>
+                        <input type="password" name="password2" required>
                     </div>
                     <div>
                         <button type="submit">Зарегистрироваться</button>
