@@ -9,6 +9,7 @@
     } else {
         $user = findUserById($_SESSION['user_id']);
         if (!$user){
+            writeLog(('code=401 | Пользователь не обнаружен. Аварийный выход из системы | userid=' . $_SESSION['user_id']));
             $_SESSION = array();
             session_destroy();
             header('Location: login.php');
@@ -53,13 +54,14 @@
                 $input['password'] = $newpassword;
             }
             
+            writeLog(('code=200 | Информация о пользователе обновлена | userid=' . $_SESSION['user_id']));
             updateUserById($user['id'], $input);
             $_SESSION['user_username'] = $newusername;
             header('Location: account.php');
             exit;
             
         } else {
-            
+            writeLog(('code=400 | ' . $error . ' userid=' . $_SESSION['user_id']));
         }
         
     }
@@ -70,6 +72,7 @@
             
             $allPoems = getPoems();
             $poemsToDelete = [];
+            $userId = $_SESSION['user_id'];
             
             foreach ($allPoems as $poems) {
                 if ($poems['authorid'] === $_SESSION['user_id']) {
@@ -78,13 +81,12 @@
             }
             
             foreach ($poemsToDelete as $poemId) {
-                
+                writeLog(('code=200 | Стихотворение удалено | userid=' . $userId . ' poemid=' . $poemId));
                 deletePoemById($poemId);
             }
             
-            $userId = $_SESSION['user_id'];
             deleteUserById($userId);
-            
+            writeLog(('code=200 | Пользователь удалён | userid=' . $userId));
             $_SESSION = array();
             session_destroy();
             
@@ -93,7 +95,7 @@
                     </script>";
             
         } else {
-            
+            writeLog(('code=401 | Неверный пароль | userid=' . $_SESSION['user_id']));
         }
         
     }

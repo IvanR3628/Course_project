@@ -1,15 +1,6 @@
 {
     "users": [
         {
-            "id": 1,
-            "username": "user",
-            "email": "user@user.ru",
-            "password_hash": "$2y$10$M.JTKGGiQTNLCstlNBNnue2qpiA1INh5z8PsuUWqayJdNvTLR757q",
-            "registrationdate": "2026-06-06 12:47:09",
-            "age": 20,
-            "admin": "n"
-        },
-        {
             "id": 2,
             "username": "user6",
             "email": "user8@user.ru",

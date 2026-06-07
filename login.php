@@ -21,21 +21,21 @@
                 if (password_verify($password, $user['password_hash'])){
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['user_username'] = $user['username'];
-                    
+                    writeLog(('code=200 | Пользователь вошёл в систему | userid=' . $user['id']));
                     header('Location: account.php');
                     exit;
                 } else {
-                    $error = "Неверный пароль";
+                    $error = $user['id'];
                     header('Location: login.php');
                     exit;
                 }
             }
         }
         if (!isset($userexist)){
-            
+            writeLog(('code=404 | Пользователя с таким email не существует | email=' . $email));
         }
         if (isset($error)){
-            
+            writeLog(('code=401 | Неверный пароль | userid=' . $error));
         }
     }
 

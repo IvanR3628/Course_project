@@ -18,9 +18,9 @@
             }
             $userAge = (int)$user['age'];
         } else {
+            writeLog(('code=401 | Пользователь не обнаружен. Аварийный выход из системы | userid=' . $_SESSION['user_id']));
             $_SESSION = array();
             session_destroy();
-            
             header('Location: index.php');
             exit;
         }

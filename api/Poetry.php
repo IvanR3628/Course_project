@@ -67,10 +67,10 @@
         }
         
         if (isset($data['title'])) {
-            $allpoems[$index]['title'] = $data['title'];
+            $allpoems[$index]['title'] = trim($data['title']);
         }
         if (isset($data['content'])) {
-            $allpoems[$index]['content'] = $data['content'];
+            $allpoems[$index]['content'] = trim($data['content']);
         }
         if (isset($data['description'])) {
             $allpoems[$index]['description'] = $data['description'];
