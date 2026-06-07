@@ -1,13 +1,13 @@
 <?php
 
     session_start();
+    require_once 'api/Controller.php';
 
     if (isset($_SESSION['user_id'])) {
         header('Location: account.php');
         exit;
     }
 
-    require_once 'api/UserController.php';
 
     $users = getUsers();
     $age = null;
@@ -37,15 +37,15 @@
         if ($error === "false"){
             $result = createNewUser($username, $email, $password, $age);
             if (isset($result['error'])) {
-                writeLog('Указанный email (' . $email . ') занят');
+                
             } else {
                 $_SESSION['user_id'] = $result['user']['id'];
                 $_SESSION['user_username'] = $username;
-                writeLog('Регистрация произошла успешно', $username, $result['user']['id']);
+                
                 header('Location: account.php');
             }
         } else {
-            writeLog($error, $email);
+            
         }
 
     }
@@ -74,7 +74,7 @@
                     </div>
                     <div>
                         <label for="age">Возраст:</label>
-                        <input type="number" id="age" name="age" min="1" max="200">
+                        <input type="number" id="age" name="age" min="1" max="150">
                     </div>
                     <div>
                         <label for="email">Почта:</label>

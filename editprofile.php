@@ -1,16 +1,20 @@
 <?php
 
     session_start();
-
-    require_once 'api/UserController.php';
-    require_once 'api/Poetry.php';
+    require_once 'api/Controller.php';
 
     if (!isset($_SESSION['user_id'])) {
         header('Location: login.php');
         exit;
+    } else {
+        $user = findUserById($_SESSION['user_id']);
+        if (!$user){
+            $_SESSION = array();
+            session_destroy();
+            header('Location: login.php');
+            exit;
+        }
     }
-
-    $user = findUserId($_SESSION['user_id']);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
         
@@ -25,21 +29,16 @@
         
         if (!password_verify($currentpassword, $user['password_hash'])) {
             $error = 'Неверный текущий пароль';
-        }
-        if ($error === "false" && $newpassword !== $newpassword2){
+        } else if ($newpassword !== $newpassword2){
             $error = "Новые пароли не совпадают";
-        }
-        if ($error === "false" && (strlen($newusername) < 2 || strlen($newusername) > 100)) {
-            $error = "Псевдоним должен быть от 2 до 100 символов";
-        }
-        if ($error === "false" && !validEmail($newemail)) {
+        } else if (!validUsername($newusername)){
+            $error = "Невалидный псевдоним. Убедитесь, что он содержит от 2 до 100 незапрещённых символов (русские и английские буквы, цифры, дефис и нижнее подчёркивание)";
+        } else if (!validEmail($newemail)) {
             $error = "Невалидный email";
-        }
-        if ($error === "false" && findUserEmail($newemail) != null && $newemail != $user['email']){
+        } else if (findUserByEmail($newemail) && $newemail != $user['email']){
             $error = "Email уже используется";
-        }
-        if ($error === "false" && $newpassword !== null && strlen($newpassword) < 6) {
-            $error = "Пароль должен быть от 6 символов";
+        } else if ($newpassword !== null && strlen($newpassword) < 6) {
+            $error = "Пароль должен содержать минимум 6 символов";
         }
         
         if ($error === "false"){
@@ -54,14 +53,13 @@
                 $input['password'] = $newpassword;
             }
             
-            updateUserId($_SESSION['user_id'], $input);
+            updateUserById($user['id'], $input);
             $_SESSION['user_username'] = $newusername;
-            writeLog('Информация успешно изменена', $newusername, $_SESSION['user_id']);
             header('Location: account.php');
             exit;
             
         } else {
-            writeLog($error, $newemail);
+            
         }
         
     }
@@ -80,13 +78,12 @@
             }
             
             foreach ($poemsToDelete as $poemId) {
-                writePLog('Удалено стихотворение', findPoemId($poemId)['title'], $poemId);
-                deletePoetryID($poemId);
+                
+                deletePoemById($poemId);
             }
             
             $userId = $_SESSION['user_id'];
-            writeLog('Удалён пользователь', $user['email'], $userId);
-            deleteUserID($userId);
+            deleteUserById($userId);
             
             $_SESSION = array();
             session_destroy();
@@ -97,7 +94,7 @@
             exit;
             
         } else {
-            writeLog('Неверный текущий пароль', $user['email']);
+            
         }
         
     }
@@ -127,7 +124,7 @@
                     </div>
                     <div>
                         <label for="age">Возраст:</label>
-                        <input type="number" id="age" name="age" min="1" max="200" value="<?php echo htmlspecialchars($user['age'] ?? ''); ?>">
+                        <input type="number" id="age" name="age" min="1" max="150" value="<?php echo htmlspecialchars($user['age'] ?? ''); ?>">
                     </div>
                     <div>
                         <label for="email">Почта:</label>

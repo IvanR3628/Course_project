@@ -1,8 +1,7 @@
 <?php
 
     session_start();
-
-    require_once 'api/UserController.php';
+    require_once 'api/Controller.php';
 
     $canWrite = false;
 
@@ -10,29 +9,30 @@
         header('Location: login.php');
         exit;
     } else {
-        $user = findUserId($_SESSION['user_id']);
+        $user = findUserById($_SESSION['user_id']);
         if ($user){
-            $regDate = strtotime($user['registrationdate']);
-            $currentDate = time();
-            $timeDiff = $currentDate - $regDate;
-            $hoursPassed = $timeDiff / 3600;
-            if ($hoursPassed >= 24) {
+            if ((time() - strtotime($user['registrationdate'])) / 3600 >= 24) {
                 $canWrite = true;
             }
+        } else {
+            $_SESSION = array();
+            session_destroy();
+            
+            header('Location: login.php');
+            exit;
         }
     }
 
-    $username = $_SESSION['user_username'];
-    $id = $_SESSION['user_id'];
-
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['yourpoetry'])) {
-        $publisherName = $username;
-        header("Location: read.php?publisher=" . urlencode($publisherName));
+        $username = $user['username'];
+        header("Location: read.php?publisher=" . urlencode($username));
         exit;
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
-        writeLog('Пользователь вышел из системы', $username, $id);
+        $email = $user['email'];
+        $id = $_SESSION['user_id'];
+        
         $_SESSION = array();
         session_destroy();
         header('Location: login.php');

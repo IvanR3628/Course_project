@@ -1,13 +1,16 @@
 <?php
 
     session_start();
+    require_once 'api/Controller.php';
+
+    if (filesize('data/poetry.json') == 0) {
+        createPoetryFile();
+    }
 
     $selectedPoemId = isset($_GET['poem_id']) ? (int)$_GET['poem_id'] : null;
     $filterAuthor = isset($_GET['author']) ? $_GET['author'] : null;
     $filterPublisher = isset($_GET['publisher']) ? $_GET['publisher'] : null;
 
-    require_once 'api/Poetry.php';
-    require_once 'api/User.php';
 
     $poems = getPoetry();
 
@@ -22,7 +25,7 @@
     $isAdmin = false;
 
     if (isset($_SESSION['user_id'])) {
-        $user = findUserId($_SESSION['user_id']);
+        $user = findUserById($_SESSION['user_id']);
         if ($user){
             $regDate = strtotime($user['registrationdate']);
             $currentDate = time();
@@ -38,7 +41,7 @@
 
     if ($userAge == null || $userAge < 18) {
         $poems = array_filter($poems, function($poem) {
-            return $poem['age'] != 'y';
+            return $poem['unsafeage'] != 'y';
         });
         $poems = array_values($poems);
     }
@@ -55,13 +58,13 @@
         } else if ($poem['anonymity'] == 'y'){
             $authors[] = 'Аноним';
         } else {
-            $user = findUserId($poem['authorid']);
+            $user = findUserById($poem['authorid']);
             if ($user) {
                 $authors[] = $user['username'];
             }
         }
         if ($poem['anonymity'] == 'n') {
-            $user = findUserId($poem['authorid']);
+            $user = findUserById($poem['authorid']);
             if ($user) {
                 $publishers[] = $user['username'];
             }
@@ -75,11 +78,11 @@
     if ($_SERVER['REQUEST_METHOD'] === 'POST'){
         
         $poemId = (int)$_POST['poem_id'];
-        $poem = findPoemId($poemId);
+        $poem = findPoemById($poemId);
         
         if ($poem && ($isAdmin === 'y' || $poem['authorid'] == $_SESSION['user_id'])) {
-            writePLog('Удалено стихотворение', $poem['title'], $poemId);
-            deletePoetryID($poemId);
+            
+            deletePoemById($poemId);
             header('Location: read.php');
             exit;
         }

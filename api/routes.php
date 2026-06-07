@@ -1,22 +1,20 @@
 <?php
 
-    require_once 'UserController.php';
-    function handleRequest($method, $uri){
+    require_once 'Controller.php';
+    function handleRequest($method, $request){
         
-        $uri = str_replace('/Course_project/api/index.php', '', $uri);
-        $uri = trim($uri, '/');
-        $parts = explode("/", $uri);
+        $request = str_replace('/Course_project/api/index.php', '', $request);
+        $request = trim($request, '/');
+        $parts = explode("/", $request);
         
-        $action = "";
-        $id = "";
-        if (count($parts) > 1){
+        if (count($parts) == 2){
             $action = $parts[0];
             $id = $parts[1];
-        } else if (count($parts) > 0){
+        } else if (count($parts) == 1){
             $action = $parts[0];
             $id = 0;
         } else {
-            sendJsonResponse('error', 'Действия не существует', $uri);
+            sendJsonResponse('error', 'Действия не существует', $request);
             exit;
         }
         
@@ -29,17 +27,14 @@
                         getOneUser($id);
                     }
                 } else {
-                    sendJsonResponse('error', 'Действия не существует', $uri);
+                    sendJsonResponse('error', 'Действия не существует', $request);
                 }
                 break;
             case 'POST':
-                $input = json_decode(file_get_contents('php://input'), true);
-                if ($action === 'register') {
-                    createUser($input);
-                } else if ($action === 'login') {
-                    loginUser($input);
+                if ($action === 'users') {
+                    createUser();
                 } else {
-                    sendJsonResponse('error', 'Действия не существует', $uri);
+                    sendJsonResponse('error', 'Действия не существует', $request);
                 }
                 break;
             case 'PUT':
@@ -47,18 +42,18 @@
                 if ($action === 'users'){
                     updateUser($id);
                 } else {
-                    sendJsonResponse('error', 'Действия не существует', $uri);
+                    sendJsonResponse('error', 'Действия не существует', $request);
                 }
                 break;
             case 'DELETE':
                 if ($action === 'users'){
                     deleteUser($id);
                 } else {
-                    sendJsonResponse('error', 'Действия не существует', $uri);
+                    sendJsonResponse('error', 'Действия не существует', $request);
                 }
                 break;
             default:
-                sendJsonResponse('error', 'Действия не существует', $uri);
+                sendJsonResponse('error', 'Действия не существует', $request);
         }
     }
 
