@@ -2,6 +2,7 @@ body {
     margin: 0;
     padding: 0;
     height: 100%;
+    background-color: rgb(251, 246, 222);
 }
 
 .page {
@@ -14,7 +15,28 @@ body {
 }
 
 .headline {
+    background-color: #615e53;
     flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.headline a {
+    color: rgb(251, 246, 222);
+    text-decoration: none;
+}
+
+.headline a:hover {
+    color: rgb(185, 181, 161);
+    text-decoration: none;
+}
+
+.headline hr, .copyright hr {
+    border: none;
 }
 
 .center {
@@ -26,6 +48,8 @@ body {
 }
 
 .copyright {
+    background-color: #4F4D46;
+    color: rgb(251, 246, 222);
     flex-shrink: 0;
     text-align: right;
 }
@@ -36,9 +60,12 @@ body {
     right: 20px;
     cursor: pointer;
     z-index: 1000;
+    font-size: 18px;
 }
 
 .gap {
+    display: flex;
+    flex-direction: row;
     gap: 10px;
 }
 

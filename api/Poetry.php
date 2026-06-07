@@ -18,7 +18,7 @@
 
     function saveAllPoems($poems) {
         $file = dirname(__DIR__) . '\data\poetry.json';
-        file_put_contents($file, json_encode(['poetry' => $poems], JSON_PRETTY_PRINT));
+        file_put_contents($file, json_encode(['poetry' => $poems], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     }
 
     function findPoemById($id) {
@@ -92,7 +92,7 @@
         }
         
         
-        saveAllPoems($poems);
+        saveAllPoems($allpoems);
         return ['poem' => $allpoems[$index]];
         
     }

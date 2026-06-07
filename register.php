@@ -25,7 +25,7 @@
             $error = "Невалидный псевдоним. Убедитесь, что он содержит от 2 до 100 незапрещённых символов (русские и английские буквы, цифры, дефис и нижнее подчёркивание)";
         } else if (!validEmail($email)) {
             $error = "Невалидный email";
-        } else if (findUserByEmail($input['email'])) {
+        } else if (findUserByEmail($email)) {
             $error = "Email уже используется";
         } else if (strlen($password) < 6) {
             $error = "Пароль должен содержать минимум 6 символов";
@@ -39,6 +39,7 @@
             header('Location: account.php');
         } else {
             writeLog(('code=400 | ' . $error));
+            echo "<script>alert('" . addslashes($error) . "'); window.location.href='register.php';</script>";
         }
 
     }
@@ -56,40 +57,40 @@
         
             <div class="headline">
                 <a href="index.php">Главная</a> <a href="read.php">Читать</a> <a href="login.php">Аккаунт</a>
-                <hr>
             </div>
+            <hr>
             
             <div class="login">
-                <form method="POST">
+                <form class="bigform" method="POST">
                     <div>
-                        <label for="username">Псевдоним:</label>
+                        <label class = "biglabel" for="username">Псевдоним:</label>
                         <input type="text" name="username" required>
                     </div>
                     <div>
-                        <label for="age">Возраст:</label>
+                        <label class = "biglabel" for="age">Возраст:</label>
                         <input type="number" name="age" min="1" max="150">
                     </div>
                     <div>
-                        <label for="email">Почта:</label>
+                        <label class = "biglabel" for="email">Почта:</label>
                         <input type="text" name="email" required>
                     </div>
                     <div>
-                        <label for="password">Пароль:</label>
+                        <label class = "biglabel" for="password">Пароль:</label>
                         <input type="password" name="password" required>
                     </div>
                     <div>
-                        <label for="password">Повторите пароль:</label>
+                        <label class = "biglabel" for="password">Повторите пароль:</label>
                         <input type="password" name="password2" required>
                     </div>
-                    <div>
-                        <button type="submit">Зарегистрироваться</button>
+                    <div class="formbuttons">
                         <a href="login.php">Войти</a>
+                        <button type="submit">Зарегистрироваться</button>
                     </div>
                 </form>
             </div>
         
+            <hr>
             <div class = "copyright">
-                <hr>
                 Все права защищены © 2026
             </div>
         </div>

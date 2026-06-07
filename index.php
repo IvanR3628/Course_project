@@ -88,8 +88,8 @@
             
             <div class="headline">
                 <a href="index.php">Главная</a> <a href="read.php">Читать</a> <a href="login.php">Аккаунт</a>
-                <hr>
             </div>
+            <hr>
 
             <div class = "center">
                 <h1>Стихотвория</h1>
@@ -142,8 +142,8 @@
                 
             </div>
 
+            <hr>
             <div class = "copyright">
-                <hr>
                 Все права защищены © 2026
             </div>
             

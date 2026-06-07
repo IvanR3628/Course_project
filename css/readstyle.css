@@ -29,6 +29,40 @@
     overflow-y: auto;
 }
 
-.poemitem {
+.filters {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 300px;
+}
+
+.filters label {
+    display: block;
+}
+
+.filters input,
+.filters select {
+    width: 100%;
+}
+
+.filters button {
+    width: 50%;
+}
+
+.filters button, .filters select {
     cursor: pointer;
+}
+
+.filters .compactgroup {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.filters .compactgroup input {
+    flex: 1;
+}
+
+.filters .compactgroup select {
+    flex: 1;
 }
