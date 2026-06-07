@@ -15,9 +15,9 @@
                 $canWrite = true;
             }
         } else {
+            writeLog(('code=401 | Пользователь не обнаружен. Аварийный выход из системы | userid=' . $_SESSION['user_id']));
             $_SESSION = array();
             session_destroy();
-            
             header('Location: login.php');
             exit;
         }
@@ -32,7 +32,7 @@
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
         $email = $user['email'];
         $id = $_SESSION['user_id'];
-        
+        writeLog(('code=200 | Пользователь вышел из системы | userid=' . $_SESSION['user_id']));
         $_SESSION = array();
         session_destroy();
         header('Location: login.php');

@@ -20,9 +20,9 @@
                 $userAge = (int)$user['age'];
             }
         } else {
+            writeLog(('code=401 | Пользователь не обнаружен. Аварийный выход из системы | userid=' . $_SESSION['user_id']));
             $_SESSION = array();
             session_destroy();
-            
             header('Location: login.php');
             exit;
         }
@@ -32,6 +32,7 @@
     }
 
     if (!$canWrite){
+        writeLog(('code=403 | У пользователя нет прав писать стихотворения | userid=' . $_SESSION['user_id']));
         header('Location: index.php');
         exit;
     }
@@ -42,6 +43,7 @@
         $title = trim($_POST['title']);
         $content = trim($_POST['content']);
         if ($title == "" || $content == ""){
+            writeLog(('code=400 | Обязательные поля не были заполнены | userid=' . $_SESSION['user_id']));
             header('Location: write.php');
             exit;
         }
@@ -63,7 +65,8 @@
             $unsafeage = "n";
         }
         
-        createNewPoem($title, $content, $authorid, $description, $anonymity, $author, $unsafeage);
+        $result = createNewPoem($title, $content, $authorid, $description, $anonymity, $author, $unsafeage);
+        writeLog(('code=200 | Создано новое стихотворение | poemid=' . $result['poem']['id']));
         
         echo    "<script>
                     alert('Стихотворение успешно опубликовано!');

@@ -32,9 +32,9 @@
             $userAge = (int)$user['age'];
             $isAdmin = $user['admin'];
         } else {
+            writeLog(('code=401 | Пользователь не обнаружен. Аварийный выход из системы | userid=' . $_SESSION['user_id']));
             $_SESSION = array();
             session_destroy();
-            
             header('Location: read.php');
             exit;
         }
@@ -87,13 +87,14 @@
         
         if ($poem) {
             if ($isAdmin === 'y' || $poem['authorid'] == $_SESSION['user_id']){
-                deletePoemById($poemId);
+                writeLog(('code=200 | Стихотворение удалено | userid=' . $_SESSION['user_id'] . ' | poemid=' . $poemId));
                 header('Location: read.php');
             } else {
-                
+                writeLog(('code=403 | У пользователя нет прав удалить это стихотворение | userid=' . $_SESSION['user_id'] . ' | poemid=' . $poemId));
+                header('Location: read.php');
             }
         } else {
-            
+            writeLog(('code=404 | Стихотворение не найдено | userid=' . $_SESSION['user_id'] . ' | poemid=' . $poemId));
             header('Location: read.php');
         }
     }

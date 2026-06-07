@@ -35,9 +35,10 @@
             $result = createNewUser($username, $email, $password, $age);
             $_SESSION['user_id'] = $result['user']['id'];
             $_SESSION['user_username'] = $username;
+            writeLog(('code=200 | Регистрация произошла успешно | userid=' . $result['user']['id']));
             header('Location: account.php');
         } else {
-            
+            writeLog(('code=400 | ' . $error));
         }
 
     }

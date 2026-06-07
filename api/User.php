@@ -87,10 +87,10 @@
         }
         
         if (isset($data['username'])) {
-            $users[$index]['username'] = $data['username'];
+            $users[$index]['username'] = trim($data['username']);
         }
         if (isset($data['email'])) {
-            $users[$index]['email'] = $data['email'];
+            $users[$index]['email'] = trim($data['email']);
         }
         if (array_key_exists('age', $data)) {
             $users[$index]['age'] = $data['age'];
