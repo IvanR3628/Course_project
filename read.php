@@ -87,6 +87,7 @@
         
         if ($poem) {
             if ($isAdmin === 'y' || $poem['authorid'] == $_SESSION['user_id']){
+                deletePoemById($poemId);
                 writeLog(('code=200 | Стихотворение удалено | userid=' . $_SESSION['user_id'] . ' | poemid=' . $poemId));
                 header('Location: read.php');
             } else {
@@ -128,12 +129,12 @@
             
             <div class="headline">
                 <a href="index.php">Главная</a> <a href="read.php">Читать</a> <a href="login.php">Аккаунт</a>
-                <hr>
             </div>
+            <hr>
 
             <div class="poetrycontainer">
 
-                <div id="filtersContent">
+                <div class="filters" id="filtersContent">
                     <h2>Фильтры</h2>
 
                     <div>
@@ -143,24 +144,28 @@
 
                     <div>
                         <label for="searchAuthor">Автор:</label>
-                        <input type="text" id="searchAuthor" placeholder="Введите автора...">
-                        <select id="authorSelect">
-                            <option value="">Выберите автора</option>
-                            <?php foreach ($authors as $author): ?>
-                                <option value="<?php echo htmlspecialchars($author); ?>"><?php echo htmlspecialchars($author); ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                        <div class="compactgroup">
+                            <input type="text" id="searchAuthor" placeholder="Введите автора...">
+                            <select id="authorSelect">
+                                <option value="">Выберите автора</option>
+                                <?php foreach ($authors as $author): ?>
+                                    <option value="<?php echo htmlspecialchars($author); ?>"><?php echo htmlspecialchars($author); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                     </div>
 
                     <div>
                         <label for="searchPublisher">Кто опубликовал:</label>
-                        <input type="text" id="searchPublisher" placeholder="Введите имя...">
-                        <select id="publisherSelect">
-                            <option value="">Выберите публикатора</option>
-                            <?php foreach ($publishers as $publisher): ?>
-                                <option value="<?php echo htmlspecialchars($publisher); ?>"><?php echo htmlspecialchars($publisher); ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                        <div class="compactgroup">
+                            <input type="text" id="searchPublisher" placeholder="Введите имя...">
+                            <select id="publisherSelect">
+                                <option value="">Выберите публикатора</option>
+                                <?php foreach ($publishers as $publisher): ?>
+                                    <option value="<?php echo htmlspecialchars($publisher); ?>"><?php echo htmlspecialchars($publisher); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                     </div>
 
                     <div>
@@ -175,14 +180,15 @@
                             <option value="oldest">Сначала старые</option>
                         </select>
                     </div>
-
-                    <button id="resetFiltersButton">Сбросить фильтры</button>
+                    <div style="text-align: center">
+                        <button id="resetFiltersButton">Сбросить фильтры</button>
+                    </div>
                 </div>
 
                 <div class="poemslist">
                     <h2>Все стихотворения</h2>
                     <div id="poemsListContainer" class="poemscontainer">
-                        Excuse me sir
+                        Загрузка...
                     </div>
                 </div>
 
@@ -194,8 +200,8 @@
                 
             </div>
 
+            <hr>
             <div class = "copyright">
-                <hr>
                 Все права защищены © 2026
             </div>
             

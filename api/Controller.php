@@ -99,8 +99,8 @@
         } 
         $input = json_decode(file_get_contents('php://input'), true);
         
-        $newusername = trim($input['username']);
-        $newemail = trim($input['email']);
+        $newusername = isset($input['username']) ? trim($input['username']) : "";
+        $newemail = isset($input['email']) ? trim($input['email']) : "";
         $age = isset($input['age']) ? $input['age'] : null;
         $admin = isset($input['admin']) ? $input['admin'] : "n";
         
@@ -152,8 +152,23 @@
         }
         
         if (findUserById($id)){
+            
+            $allPoems = getPoems();
+            $poemsToDelete = [];
+            
+            foreach ($allPoems as $poems) {
+                if ($poems['authorid'] == $id) {
+                    $poemsToDelete[] = $poems['id'];
+                }
+            }
+            
+            foreach ($poemsToDelete as $poemId) {
+                writeLog(('API request | code=200 | Стихотворение удалено | userid=' . $id . ' poemid=' . $poemId));
+                deletePoemById($poemId);
+            }
+            
             $result = deleteUserById($id);
-            sendJsonResponse(200, 'success', 'Пользователь удалён', $result['user']);
+            sendJsonResponse(200, 'success', 'Пользователь и все его стихи удалены', $result['user']);
         } else {
             sendJsonResponse(404, 'error', 'Пользователя не существует');
         }

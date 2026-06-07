@@ -62,6 +62,7 @@
             
         } else {
             writeLog(('code=400 | ' . $error . ' userid=' . $_SESSION['user_id']));
+            echo "<script>alert('" . addslashes($error) . "'); window.location.href='editprofile.php';</script>";
         }
         
     }
@@ -75,7 +76,7 @@
             $userId = $_SESSION['user_id'];
             
             foreach ($allPoems as $poems) {
-                if ($poems['authorid'] === $_SESSION['user_id']) {
+                if ($poems['authorid'] === $userId) {
                     $poemsToDelete[] = $poems['id'];
                 }
             }
@@ -96,6 +97,7 @@
             
         } else {
             writeLog(('code=401 | Неверный пароль | userid=' . $_SESSION['user_id']));
+            echo "<script>alert('Неверный пароль'); window.location.href='editprofile.php';</script>";
         }
         
     }
@@ -115,36 +117,36 @@
         
             <div class="headline">
                 <a href="index.php">Главная</a> <a href="read.php">Читать</a> <a href="login.php">Аккаунт</a>
-                <hr>
             </div>
+            <hr>
             
             <div class="login">
-                <form method="POST">
+                <form class="bigform" method="POST">
                     <div>
-                        <label for="username">Псевдоним:</label>
+                        <label class = "biglabel" for="username">Псевдоним:</label>
                         <input type="text" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required>
                     </div>
                     <div>
-                        <label for="age">Возраст:</label>
+                        <label class = "biglabel" for="age">Возраст:</label>
                         <input type="number" name="age" min="1" max="150" value="<?php echo htmlspecialchars($user['age'] ?? ''); ?>">
                     </div>
                     <div>
-                        <label for="email">Почта:</label>
+                        <label class = "biglabel" for="email">Почта:</label>
                         <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
                     </div>
                     <div>
-                        <label for="password">Текущий пароль:</label>
+                        <label class = "biglabel" for="password">Текущий пароль:</label>
                         <input type="password" name="password" required>
                     </div>
                     <div>
-                        <label for="password">Новый пароль:</label>
+                        <label class = "biglabel" for="password">Новый пароль:</label>
                         <input type="password" name="newpassword">
                     </div>
                     <div>
-                        <label for="password">Повторите пароль:</label>
+                        <label class = "biglabel" for="password">Повторите пароль:</label>
                         <input type="password" name="newpassword2">
                     </div>
-                    <div>
+                    <div class="formbuttons">
                         <button type="submit" name="update">Обновить</button>
                         <button type="button" onclick="location.href='account.php'">Отмена</button>
                         <button type="submit" name="delete"
@@ -153,8 +155,8 @@
                 </form>
             </div>
         
+            <hr>
             <div class = "copyright">
-                <hr>
                 Все права защищены © 2026
             </div>
             

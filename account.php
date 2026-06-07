@@ -74,15 +74,15 @@
 
             <div class="headline">
                 <a href="index.php">Главная</a> <a href="read.php">Читать</a> <a href="login.php">Аккаунт</a>
-                <hr>
             </div>
+            <hr>
 
             <div class="center">
                 <form method="POST">
                     <div>
                         <h1>Добро пожаловать, <?php echo $_SESSION['user_username']; ?>!</h1>
                     </div>
-                    <div>
+                    <div class="gap">
                         <button type="submit" name="yourpoetry">Открыть свои стихи</button>
                         <button type="submit" name="logout">Выйти из аккаунта</button>
                         <button type="submit" name="editprofile">Редактировать информацию</button>
@@ -90,8 +90,8 @@
                 </form>
             </div>
 
+            <hr>
             <div class = "copyright">
-                <hr>
                 Все права защищены © 2026
             </div>
             

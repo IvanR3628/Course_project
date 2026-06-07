@@ -215,6 +215,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const safeAuthor = safeHtml(authorName);
         const safePublisher = safeHtml(publisherName);
         
+        let editButtonHtml = '';
+        if (isAdmin === "y" || (currentUserId && poem.authorid == currentUserId)) {
+            editButtonHtml = `
+                <button onclick="location.href='edit.php?id=${poem.id}'">
+                    Редактировать стихотворение
+                </button>
+                <br>
+                <br>
+            `;
+        }
         let deleteButtonHtml = '';
         if (isAdmin === "y" || (currentUserId && poem.authorid == currentUserId)) {
             deleteButtonHtml = `
@@ -226,7 +236,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 </form>
             `;
         }
-
         container.innerHTML = `
             <h2>${safeTitle}</h2>
             ${poem.unsafeage == 'y' ? '<div>Контент для взрослых (18+)</div><br>' : ''}
@@ -237,6 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p><strong>Опубликовал:</strong> ${safePublisher}</p>
                 <p><strong>Дата публикации:</strong> ${date}</p>
             </div>
+            ${editButtonHtml}
             ${deleteButtonHtml}
         `;
     }

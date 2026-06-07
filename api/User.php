@@ -18,7 +18,7 @@
 
     function saveAllUsers($users) {
         $file = dirname(__DIR__) . '\data\users.json';
-        file_put_contents($file, json_encode(['users' => $users], JSON_PRETTY_PRINT));
+        file_put_contents($file, json_encode(['users' => $users], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     }
 
     function validUsername($username){
@@ -122,6 +122,7 @@
         
         $deletedUser = $users[$index];
         array_splice($users, $index, 1);
+        
         saveAllUsers($users);
         return ['user' => $deletedUser];
     }

@@ -33,9 +33,11 @@
         }
         if (!isset($userexist)){
             writeLog(('code=404 | Пользователя с таким email не существует | email=' . $email));
+            echo "<script>alert('Пользователя с таким email не существует'); window.location.href='login.php';</script>";
         }
         if (isset($error)){
             writeLog(('code=401 | Неверный пароль | userid=' . $error));
+            echo "<script>alert('Неверный пароль'); window.location.href='login.php';</script>";
         }
     }
 
@@ -53,28 +55,28 @@
         
             <div class="headline">
                 <a href="index.php">Главная</a> <a href="read.php">Читать</a> <a href="login.php">Аккаунт</a>
-                <hr>
             </div>
+            <hr>
             
             <div class="login">
-                <form method="POST">
+                <form class="smallform" method="POST">
                     <div>
-                        <label for="email">Почта:</label>
-                        <input type="text" name="email" required>
+                        <label class = "smalllabel" for="email">Почта:</label>
+                        <input class = "smallform" type="text" name="email" required>
                     </div>
                     <div>
-                        <label for="password">Пароль:</label>
-                        <input type="password" name="password" required>
+                        <label class = "smalllabel" for="password">Пароль:</label>
+                        <input class = "smallform" type="password" name="password" required>
                     </div>
-                    <div>
+                    <div class="formbuttons">
                         <button type="submit">Войти</button>
                         <a href="register.php">Зарегистрироваться</a>
                     </div>
                 </form>
             </div>
         
+            <hr>
             <div class = "copyright">
-                <hr>
                 Все права защищены © 2026
             </div>
         </div>
